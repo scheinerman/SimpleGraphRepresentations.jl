@@ -1,2 +1,2 @@
-# SimpleGraphRepresentations.jl
-Extension of SimpleGraphs containing methods for dealing with intersection graphs and the like
+# SimpleGraphRepresentations
+Extension of `SimpleGraphs` containing methods for dealing with intersection graphs and the like.
