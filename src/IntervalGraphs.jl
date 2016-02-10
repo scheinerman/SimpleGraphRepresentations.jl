@@ -1,7 +1,7 @@
 # Functions to create interval graphs in Julia
 
-using SimpleGraphs
-using ClosedIntervals
+export IntervalGraph, IntervalDigraph
+export RandomIntervalGraph, RandomIntervalDigraph
 
 # Create an interval graph given a 1-dimensional array of
 # ClosedInterval's.
