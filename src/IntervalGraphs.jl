@@ -1,10 +1,15 @@
 # Functions to create interval graphs in Julia
 
-export IntervalGraph, IntervalDigraph
-export RandomIntervalGraph, RandomIntervalDigraph
+export IntervalGraph, IntervalDigraph2
+export RandomIntervalGraph, RandomIntervalDigraph2
 
 # Create an interval graph given a 1-dimensional array of
 # ClosedInterval's.
+
+"""
+`IntervalGraph(Jlist)` creates an interval graph from a list of closed
+intervals.
+"""
 function IntervalGraph{T}(Jlist::Array{ClosedInterval{T},1})
     n = length(Jlist)
     G = IntGraph(n)
@@ -23,7 +28,12 @@ function IntervalGraph{T}(Jlist::Array{ClosedInterval{T},1})
 end
 
 # Likewise for directed graphs
-function IntervalDigraph{T}(
+
+"""
+`IntervalDigraph2(send_list, rec_list)` creates a Type II interval
+graph from two lists of intervals.
+"""
+function IntervalDigraph2{T}(
          send_list::Array{ClosedInterval{T},1},
          rec_list::Array{ClosedInterval{T},1}
                             )
@@ -49,8 +59,12 @@ function IntervalDigraph{T}(
     return G
 end
 
-# Create an interval graph from a dictionary that maps vertices to
-# intervals.
+
+"""
+`IntervalGraph(f::Dict)` creates asn interval graph from a dictionary
+whose keys are the names of the vertices and whose values are
+intervals.
+"""
 function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
     klist = collect(keys(f))
     G = SimpleGraph{K}()
@@ -73,7 +87,12 @@ function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
 end
 
 # Likewise for digraphs
-function IntervalDigraph{K,T}(snd::Dict{K,ClosedInterval{T}} ,
+
+"""
+`IntervalDigraph2(send::Dict,rec::Dict)` creates a Type II interval
+digraph from two dictionaries mapping vertices to intervals.
+"""
+function IntervalDigraph2{K,T}(snd::Dict{K,ClosedInterval{T}} ,
                               rec::Dict{K,ClosedInterval{T}})
     if length(snd) != length(rec)
         error("send and receive dictionaries must have same keys")
@@ -116,8 +135,8 @@ function RandomIntervalGraph(n::Int)
 end
 
 # And likewise for digraphs
-function RandomIntervalDigraph(n::Int)
+function RandomIntervalDigraph2(n::Int)
     snd_list = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
     rec_list  = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
-    return IntervalDigraph(snd_list, rec_list)
+    return IntervalDigraph2(snd_list, rec_list)
 end
