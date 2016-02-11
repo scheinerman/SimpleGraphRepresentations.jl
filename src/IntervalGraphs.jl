@@ -1,7 +1,7 @@
 # Functions to create interval graphs in Julia
 
-export IntervalGraph, IntervalDigraph2
-export RandomIntervalGraph, RandomIntervalDigraph2
+export IntervalGraph, IntervalDigraph1, IntervalDigraph2
+export RandomIntervalGraph, RandomIntervalDigraph1, RandomIntervalDigraph2
 
 # Create an interval graph given a 1-dimensional array of
 # ClosedInterval's.
@@ -27,7 +27,65 @@ function IntervalGraph{T}(Jlist::Array{ClosedInterval{T},1})
     return G
 end
 
-# Likewise for directed graphs
+"""
+`edge_helper(A,B)` for closed intervals `A` and `B` is a private
+function that returns the following values:
+
++ `0` if no edge 
++ `1` if edge from `A` to `B` (but not reverse)
++ `2` if edge from `B` to `A` (but not reverse)
++ `3` if both 
+"""
+function edge_helper(A::ClosedInterval, B::ClosedInterval)
+    # no intersection
+    if isempty(A*B)
+        return 0
+    end
+
+    # containment
+    if (left(A) <= left(B) <= right(A)) && (left(A) <= right(B) <= right(A))
+        return 3
+    end
+
+    if (left(B) <= left(A) <= right(B)) && (left(B) <= right(A) <= right(B))
+        return 3
+    end
+
+    # overlap
+    if left(A) <= left(B)
+        return 1
+    end
+    return 2
+end
+
+
+"""
+`IntervalDigraph1(Jlist)` creates a type I interval digraph from a
+list of closed intervals.
+"""
+function IntervalDigraph1{T}(Jlist::Array{ClosedInterval{T},1})
+    n = length(Jlist)
+    G = IntDigraph(n)
+    for u=1:n
+        J = Jlist[u]
+        for v=u:n
+            K = Jlist[v]
+
+            choice = edge_helper(J,K)
+
+            if choice == 1 || choice == 3
+                add!(G,u,v)
+            end
+
+            if choice == 2 || choice == 3
+                add!(G,v,u)
+            end
+            
+        end
+    end
+    return G
+end
+            
 
 """
 `IntervalDigraph2(send_list, rec_list)` creates a Type II interval
@@ -43,16 +101,13 @@ function IntervalDigraph2{T}(
     end
 
     G = IntDigraph(n)
-    forbid_loops!(G)
 
     for u=1:n
         A = send_list[u]
         for v=1:n
-            if u!=v
-                B = rec_list[v]
-                if !isempty(A*B)
-                    add!(G,u,v)
-                end
+            B = rec_list[v]
+            if !isempty(A*B)
+                add!(G,u,v)
             end
         end
     end
@@ -86,7 +141,50 @@ function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
     return G
 end
 
-# Likewise for digraphs
+
+"""
+`IntervalDigraph(f::Dict)` creates a type I interval digraph from a
+dictionary whose keys are the names of the vertices and whose values
+are intervals.  
+"""
+function IntervalDigraph1{K,T}(snd::Dict{K,ClosedInterval{T}} ,
+                              rec::Dict{K,ClosedInterval{T}})
+    if length(snd) != length(rec)
+        error("send and receive dictionaries must have same keys")
+    end
+
+    klist = keys(snd)
+    for k in klist
+        if !haskey(rec)
+            error("send and receive dictionaries must have same keys")
+        end
+    end
+
+    n = length(klist)
+    G = SimpleDigraph{K}()
+
+    for i=1:n
+        u = klist[i]
+        A = snd[u]
+        for j=1:n
+            v = klist[j]
+            B = rec[v]
+
+            choice = edge_helper(A,B)
+            
+            if choice == 1 || choice == 3
+                add!(G,u,v)
+            end
+
+            if choice == 2 || choice == 3
+                add!(G,v,u)
+            end
+        end
+    end
+    return G
+end
+    
+    
 
 """
 `IntervalDigraph2(send::Dict,rec::Dict)` creates a Type II interval
@@ -107,18 +205,15 @@ function IntervalDigraph2{K,T}(snd::Dict{K,ClosedInterval{T}} ,
 
     n = length(klist)
     G = SimpleGraph{K}()
-    forbid_loops!(G)
 
     for i=1:n
         u = klist[i]
         A = snd[u]
         for j=1:n
-            if i!=j
-                v = klist[j]
-                B = rec[v]
-                if !isempty(A*B)
-                    add!(G,u,v)
-                end
+            v = klist[j]
+            B = rec[v]
+            if !isempty(A*B)
+                add!(G,u,v)
             end
         end
     end
@@ -127,16 +222,36 @@ function IntervalDigraph2{K,T}(snd::Dict{K,ClosedInterval{T}} ,
 end
 
 
-# Generate n random intervals in [0,1] and form the intersection graph
-# thereof.
+"""
+`RandomIntervalGraph(n)` generates a random interval graph with `n`
+vertices.
+"""
 function RandomIntervalGraph(n::Int)
     Jlist = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
     return IntervalGraph(Jlist)
 end
 
-# And likewise for digraphs
+
+"""
+`RandomIntervalDigraph1(n)` generates a random type I interval 
+digraph with `n` vertices.
+"""
+function RandomIntervalDigraph1(n::Int)
+    Jlist = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
+    return IntervalDigraph1(Jlist)
+end
+
+
+
+
+"""
+`RandomIntervalDigraph2(n::Int)` generates a random type II 
+directed interval graph with `n` vertices.
+"""
 function RandomIntervalDigraph2(n::Int)
     snd_list = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
     rec_list  = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
     return IntervalDigraph2(snd_list, rec_list)
 end
+
+
