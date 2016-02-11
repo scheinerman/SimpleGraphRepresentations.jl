@@ -1,5 +1,9 @@
-using SimpleGraphs
+export ThresholdGraph, RandomThresholdGraph
 
+"""
+`ThresholdGraph(w)` creates a threshold graph using weights from the
+vector `w`.
+"""
 function ThresholdGraph{T<:Real}(w::Array{T,1})
     n = length(w)
     G = IntGraph(n)
@@ -13,18 +17,12 @@ function ThresholdGraph{T<:Real}(w::Array{T,1})
     return G
 end
 
-
+"""
+`RandomThresholdGraph(n)` creates a random threshold graph with `n`
+vertices.
+"""
 function RandomThresholdGraph(n::Int)
     w = rand(n)
     return ThresholdGraph(w)
 end
 
-
-function degsort(G::SimpleGraph)
-    vv = vlist(G)
-    dd = [ deg(G,v) for v in vv ]
-    p  = sortperm(dd)
-
-    f = Dict(zip(p,vv))
-    return relabel(G,f)
-end
