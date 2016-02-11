@@ -53,3 +53,15 @@ interval digraphs.
   interval digraph.
 
 
+## Permutation Graphs
+
+Create permutation graphs from one or two permutations.
+
++ `PermutationGraph(p,q)` creates a permutation graph in which there
+  is an edge from `u` to `v` iff `(p[u]-p[v])*(q[u]-q[v])<0`.
+
++ `PermutationGraph(p)` is equivalent to `PermutationGraph(p,id)`
+  where `id` is the identity permutation.
+
++ `RandomPermutationGraph(n)` creates an `n`-vertex random permutation
+  graph.
