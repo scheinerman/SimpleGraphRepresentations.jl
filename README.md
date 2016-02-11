@@ -71,6 +71,9 @@ Create permutation graphs from one or two permutations.
 
 Documentation to come.
 
++ `ThresholdGraph`
++ `RandomThresholdGraph`
+
 ## Intersection Graphs
 
 Code and documentation to come.
