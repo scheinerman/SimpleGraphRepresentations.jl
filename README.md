@@ -33,7 +33,7 @@ interval digraphs.
 + `IntervalDigraph1(Jlist)` creates a type I interval digraph from a
   list of intervals.
 
-+ `IntervalDigraph(f)` where `f` is a dictionay mapping vertex nmaes
++ `IntervalDigraph(f)` where `f` is a dictionary mapping vertex nmaes
   to closed intervals creates a type I interval digraph.
 
 + `RandomIntervalDigraph1(n)` creates a random type I interval digraph
