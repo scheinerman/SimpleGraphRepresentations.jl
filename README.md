@@ -65,3 +65,14 @@ Create permutation graphs from one or two permutations.
 
 + `RandomPermutationGraph(n)` creates an `n`-vertex random permutation
   graph.
+
+
+## Threshold Graphs
+
+Documentation to come.
+
+## Intersection Graphs
+
+Code and documentation to come.
+
+
