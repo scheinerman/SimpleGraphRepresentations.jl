@@ -1,6 +1,11 @@
-using SimpleGraphs
-using Permutations
 
+export PermutationGraph, RandomPermutationGraph
+
+"""
+`PermutationGraph(p,q)` builds a permutation graph based on the
+permutations `p` and `q`. There is an edge from `u` to `v` iff
+`(p[u]-p[v])*(q[u]-q[v])<0`.
+"""
 function PermutationGraph(p::Permutation, q::Permutation)
     n = length(p)
     if length(q) != n
@@ -17,12 +22,20 @@ function PermutationGraph(p::Permutation, q::Permutation)
     return G
 end
 
+"""
+`PermutationGraph(p)` is equivalent to `PermutationGraph(p,id)` where
+`id` is the identity permutation.
+"""
 function PermutationGraph(p::Permutation)
     n = length(p)
     q = Permutation(n)
     return PermutationGraph(p,q)
 end
 
+"""
+`RandomPermutationGraph(n)` creates a random permutation graph with
+`n` vertices.
+"""
 function RandomPermutationGraph(n::Int)
     p = RandomPermutation(n)
     q = RandomPermutation(n)
