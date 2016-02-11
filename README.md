@@ -19,7 +19,7 @@ interval digraphs.
 
 + `IntervalGraph(Jlist)` creates an interval graph from a list of
   closed intervals. The vertices are numbered `1` to `n` (where `n` is
-  the length of `Jlist`.
+  the length of `Jlist`).
 
 + `IntervalGraph(f)` where `f` is a dictionary mapping vertex names to
   closed intervals creates an interval graph.
