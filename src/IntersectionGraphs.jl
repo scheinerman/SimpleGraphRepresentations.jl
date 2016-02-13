@@ -2,6 +2,11 @@ export IntersectionGraph
 
 AnySet = Union{Set,IntSet}
 
+"""
+`IntersectionGraph(setlist)` creates an intersection graph on vertex set
+`1:n` from a list of `n` sets (all of type `Set` or all of type
+`IntSet`).
+"""
 function IntersectionGraph{T<:AnySet}(slist::Vector{T})
     n = length(slist)
     G = IntGraph(n)
@@ -19,6 +24,11 @@ function IntersectionGraph{T<:AnySet}(slist::Vector{T})
 end
 
 
+"""
+`IntersectionGraph(f)` creates an intersection graph from the
+dictionary `f`. The keys are the vertices and the values are the sets
+(all of type `Set` or all of type `IntSet`).
+"""
 function IntersectionGraph{S,T<:AnySet}(f::Dict{S,T})
     G = SimpleGraph{S}()
     for v in keys(f)
