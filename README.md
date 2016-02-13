@@ -1,16 +1,16 @@
-# SimpleGraphRepresentations
+# Simple Graph Representations
 
-Extension of `SimpleGraphs` containing methods for dealing with
-intersection graphs and the like.
+The `SimpleGraphRepresentations` module is an extension of
+`SimpleGraphs`. It provides methods for dealing with intersection
+graphs and the like.
 
-This module requires the following:
+This module requires the following modules:
 
 + `SimpleGraphs`
 + `ClosedIntervals`
 + `Permutations`
 
-
-## Interval Graphs
+## Interval graphs
 
 We provide the following functions for creating interval graphs and
 interval digraphs.
@@ -33,7 +33,7 @@ interval digraphs.
 + `IntervalDigraph1(Jlist)` creates a type I interval digraph from a
   list of intervals.
 
-+ `IntervalDigraph(f)` where `f` is a dictionary mapping vertex nmaes
++ `IntervalDigraph(f)` where `f` is a dictionary mapping vertex names
   to closed intervals creates a type I interval digraph.
 
 + `RandomIntervalDigraph1(n)` creates a random type I interval digraph
@@ -53,7 +53,7 @@ interval digraphs.
   interval digraph.
 
 
-## Permutation Graphs
+## Permutation graphs
 
 Create permutation graphs from one or two permutations.
 
@@ -67,15 +67,22 @@ Create permutation graphs from one or two permutations.
   graph.
 
 
-## Threshold Graphs
+## Threshold graphs
 
-Documentation to come.
++ `ThresholdGraph(wts)` creates a threshold graph from a list of
+  weights. Vertices are named `1:n` where `n=length(wts)`.
 
-+ `ThresholdGraph`
-+ `RandomThresholdGraph`
++ `ThresholdGraph(f)` creates a threshold graph from a dictionary
+  mapping vertex names to weights.
 
-## Intersection Graphs
++ `RandomThresholdGraph(n)` creates a random threshold graph with
+  vertices named `1:n` with IID uniform [0,1] weights. 
 
-Code and documentation to come.
+## Intersection graphs
 
++ `IntersectionGraph(setlist)` creates an intersection graph from a
+  list of sets (all of type `Set` or all of type `IntSet`). Vertices
+  are named `1:n` where `n` is the length of the list of sets.
 
++ `IntersectionGraph(f)` creates an intersection graph from a
+  dictionary mapping vertex names to sets.
