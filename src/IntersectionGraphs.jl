@@ -1,3 +1,5 @@
+export IntersectionGraph
+
 AnySet = Union{Set,IntSet}
 
 function IntersectionGraph{T<:AnySet}(slist::Vector{T})
