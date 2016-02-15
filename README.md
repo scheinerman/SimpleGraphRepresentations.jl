@@ -3,12 +3,16 @@
 The `SimpleGraphRepresentations` module is an extension of
 `SimpleGraphs`. It provides methods for dealing with intersection
 graphs and the like.
+This module requires my
+`SimpleGraphs`, `ClosedIntervals`, and
+`Permutations` modules. 
 
-This module requires the following modules:
+The functions in this module deal with the following types of graphs:
 
-+ `SimpleGraphs`
-+ `ClosedIntervals`
-+ `Permutations`
++ Interval graphs (and interval digraphs)
++ Permutation graphs
++ Threshold graphs
++ Intersection graphs (of finite sets)
 
 ## Interval graphs
 
