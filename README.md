@@ -5,7 +5,7 @@ The `SimpleGraphRepresentations` module is an extension of
 graphs and the like.
 This module requires my
 `SimpleGraphs`, `ClosedIntervals`, and
-`Permutations` modules. 
+`Permutations` modules.
 
 The functions in this module deal with the following types of graphs:
 
@@ -80,7 +80,19 @@ Create permutation graphs from one or two permutations.
   mapping vertex names to weights.
 
 + `RandomThresholdGraph(n)` creates a random threshold graph with
-  vertices named `1:n` with IID uniform [0,1] weights. 
+  vertices named `1:n` with IID uniform [0,1] weights.
+
++ `CreationSequence(G)` returns the creation sequence of a threshold
+  graph (or raises an error if `G` is not threshold). This returns a
+  pair `(seq,vtcs)` where `seq` is the creation sequence and `vtcs` is
+  a listing of the vertices in the order in which they should be
+  added.
+
++ `ThresholdRepresentation(G)` returns a threshold representation of
+  `G` (or raises an error if `G` is not threshold). This returns a
+  dictionary mapping the vertices of `G` to weights (of type
+  `Rational`).
+
 
 ## Intersection graphs
 
@@ -90,3 +102,9 @@ Create permutation graphs from one or two permutations.
 
 + `IntersectionGraph(f)` creates an intersection graph from a
   dictionary mapping vertex names to sets.
+
+
+## Acknowledgement
+
+The `CreationSequence` and `ThresholdRepresentation` functions were
+contributed by Tara Abrishami.
