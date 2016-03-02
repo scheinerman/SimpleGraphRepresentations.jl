@@ -64,7 +64,7 @@ vertices are added when creating `G`. If `G` is not a threshold
 graph, then an error is raised.
 """
 
-function CreationSequence(G1::SimpleGraphs.SimpleGraph)
+function CreationSequence(G1::SimpleGraph)
     A = Int[]
     T = vertex_type(G1)
     V = T[]
@@ -100,14 +100,15 @@ end
 weights. An error is raised if `G` is not a threshold graph.
 """
 function ThresholdRepresentation(G::SimpleGraph)
-    A = Int[]
-    T = vertex_type(G)
-    V = T[]
-    try
-        A,V = CreationSequence(G)
-    catch
-        error("This graph is not a threshold graph")
-    end
+#    A = Int[]
+#    T = vertex_type(G)
+#    V = T[]
+    A,V = CreationSequence(G)
+#    try
+#        A,V = CreationSequence(G)
+#    catch
+#        error("This graph is not a threshold graph")
+#    end
 
     prev::Int = 0
     prevVal::Rational = 1//4
