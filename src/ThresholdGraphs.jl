@@ -100,15 +100,7 @@ end
 weights. An error is raised if `G` is not a threshold graph.
 """
 function ThresholdRepresentation(G::SimpleGraph)
-#    A = Int[]
-#    T = vertex_type(G)
-#    V = T[]
     A,V = CreationSequence(G)
-#    try
-#        A,V = CreationSequence(G)
-#    catch
-#        error("This graph is not a threshold graph")
-#    end
 
     prev::Int = 0
     prevVal::Rational = 1//4
