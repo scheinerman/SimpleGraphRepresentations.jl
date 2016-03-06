@@ -59,7 +59,7 @@ interval digraphs.
 
 ## Permutation graphs
 
-Create permutation graphs from one or two permutations.
+Create permutation graphs from one or two `Permutation` objects.
 
 + `PermutationGraph(p,q)` creates a permutation graph in which there
   is an edge from `u` to `v` iff `(p[u]-p[v])*(q[u]-q[v])<0`.
@@ -67,8 +67,16 @@ Create permutation graphs from one or two permutations.
 + `PermutationGraph(p)` is equivalent to `PermutationGraph(p,id)`
   where `id` is the identity permutation.
 
++ `PermutationGraph(d)` where `d` is a `Dict` creates a permutation
+  graph whose vertices are the keys in `d`. The values in `d` should
+  be pairs of numbers. That is, `d`'s type should be
+  `Dict{Vtype, Tuple{R1,R2}}` where `Vtype` is the type of the
+  vertices and `R1` and `R2` are subtypes of `Real`.
+
 + `RandomPermutationGraph(n)` creates an `n`-vertex random permutation
   graph.
+
+
 
 
 ## Threshold graphs
