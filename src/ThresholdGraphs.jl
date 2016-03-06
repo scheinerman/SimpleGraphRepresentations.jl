@@ -103,12 +103,12 @@ function ThresholdRepresentation(G::SimpleGraph)
     A,V = CreationSequence(G)
 
     prev::Int = 0
-    prevVal::Rational = 1//4
+    prevVal::Rational = 1//3
     T = vertex_type(G)
     D = Dict{T, Rational}()
-    D[V[1]] = 1//4
-    small::Rational = 1//4
-    large::Rational = 1//4
+    D[V[1]] = prevVal
+    small::Rational = prevVal
+    large::Rational = prevVal
     for i in 2:length(A)
         if A[i] == prev
             D[V[i]] = prevVal
