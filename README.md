@@ -111,6 +111,48 @@ Create permutation graphs from one or two `Permutation` objects.
 + `IntersectionGraph(f)` creates an intersection graph from a
   dictionary mapping vertex names to sets.
 
+## Geometric graphs
+
+A *geometric graph* is a graph whose vertices are represented by
+points in a metric space (for our purposes, Euclidean space) in which
+a pair of vertices forms an edge iff the distance between their points
+is at most 1 (or some other specified value).
+
++ `GeometricGraph(A)` where `A` is an `m` by `n` matrix creates a
+  geometric graph in which the columns of `A` are the points
+  representing the vertices `1:n`. Two vertices are adjacent iff the
+  distance between the points is at most 1 (or an optional second
+  parameter, `d`).
+
++ `GeometricGraph(f)` where `f` is a `Dict` mapping vertex names to
+  vectors creates a geometric graph in which two vertices are adjacent
+  iff distance between their points is at most 1 (or `d` if given as a
+  second argument).
+
++ `RandomGeometricGraph(n::Int, dim::Int=2, d::Real=1)` creates a
+  random geometric graph by generating `n` points at random in the
+  unit `dim`-cube.  Vertices are adjacent if their corresponding
+  points are at distance at most `d`.
+
+## Tolerance graphs
+
+A *tolerance graph* is a graph whose vertices are represented by a
+pair consisting of a closed interval and a real tolerance. Two
+vertices are adjacent if the length of the intersection of their
+intervals exceeds either tolerance.
+
++ `ToleranceGraph(Jlist, tlist)` creates a tolerance graph with vertex
+  set `1:n` where `Jlist` is an `n`-long list of closed intervals and
+  `tlist` is an `n`-long list of real tolerances.
+
++ `ToleranceGraph(f)` where `f` is a `Dict` creates a tolerance graph
+  where `f` maps vertex names to pairs `(J,t)` where `J` is a closed
+  interval and `t` is a real tolerance. For example:
+  ```
+  f = Dict{ASCIIString, Tuple{ClosedInterval{Int},Float64}}()
+  f["alpha"] = ( ClosedInterval(3,6), 0.2 )
+  ```
+
 
 ## Acknowledgement
 

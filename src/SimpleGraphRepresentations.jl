@@ -8,5 +8,7 @@ include("IntervalGraphs.jl")
 include("PermutationGraphs.jl")
 include("ThresholdGraphs.jl")
 include("IntersectionGraphs.jl")
+include("GeometricGraphs.jl")
+include("ToleranceGraphs.jl")
 
 end # end of module
