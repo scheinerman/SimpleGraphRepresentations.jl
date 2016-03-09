@@ -2,6 +2,8 @@
 # (J,t) where J is a closed interval and t is a real number. Vertices
 # are adjacent if and only if length(J * JJ) >= min(t,tt).
 
+export ToleranceGraph
+
 """
 `ToleranceGraph(Jlist, tlist)` creates a tolerance graph where `Jlist`
 is a list of intervals and `tlist` is a list of tolerances.
