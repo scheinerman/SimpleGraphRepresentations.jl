@@ -2,6 +2,7 @@
 
 export IntervalGraph, IntervalDigraph1, IntervalDigraph2
 export RandomIntervalGraph, RandomIntervalDigraph1, RandomIntervalDigraph2
+export UnitIntervalGraph, RandomUnitIntervalGraph
 
 # Create an interval graph given a 1-dimensional array of
 # ClosedInterval's.
@@ -31,10 +32,10 @@ end
 `edge_helper(A,B)` for closed intervals `A` and `B` is a private
 function that returns the following values:
 
-+ `0` if no edge 
++ `0` if no edge
 + `1` if edge from `A` to `B` (but not reverse)
 + `2` if edge from `B` to `A` (but not reverse)
-+ `3` if both 
++ `3` if both
 """
 function edge_helper(A::ClosedInterval, B::ClosedInterval)
     # no intersection
@@ -80,12 +81,12 @@ function IntervalDigraph1{T}(Jlist::Array{ClosedInterval{T},1})
             if choice == 2 || choice == 3
                 add!(G,v,u)
             end
-            
+
         end
     end
     return G
 end
-            
+
 
 """
 `IntervalDigraph2(send_list, rec_list)` creates a Type II interval
@@ -145,7 +146,7 @@ end
 """
 `IntervalDigraph(f::Dict)` creates a type I interval digraph from a
 dictionary whose keys are the names of the vertices and whose values
-are intervals.  
+are intervals.
 """
 function IntervalDigraph1{K,T}(snd::Dict{K,ClosedInterval{T}} ,
                               rec::Dict{K,ClosedInterval{T}})
@@ -171,7 +172,7 @@ function IntervalDigraph1{K,T}(snd::Dict{K,ClosedInterval{T}} ,
             B = rec[v]
 
             choice = edge_helper(A,B)
-            
+
             if choice == 1 || choice == 3
                 add!(G,u,v)
             end
@@ -183,8 +184,8 @@ function IntervalDigraph1{K,T}(snd::Dict{K,ClosedInterval{T}} ,
     end
     return G
 end
-    
-    
+
+
 
 """
 `IntervalDigraph2(send::Dict,rec::Dict)` creates a Type II interval
@@ -233,7 +234,7 @@ end
 
 
 """
-`RandomIntervalDigraph1(n)` generates a random type I interval 
+`RandomIntervalDigraph1(n)` generates a random type I interval
 digraph with `n` vertices.
 """
 function RandomIntervalDigraph1(n::Int)
@@ -245,7 +246,7 @@ end
 
 
 """
-`RandomIntervalDigraph2(n::Int)` generates a random type II 
+`RandomIntervalDigraph2(n::Int)` generates a random type II
 directed interval graph with `n` vertices.
 """
 function RandomIntervalDigraph2(n::Int)
@@ -255,3 +256,34 @@ function RandomIntervalDigraph2(n::Int)
 end
 
 
+
+"""
+`UnitIntervalGraph(x,t=1)` creates a unit interval graph where the
+vector `x` specifies the left end points of the intervals. The
+optional parameter `t` specifies the lengths of the intervals.
+"""
+function UnitIntervalGraph{T<:Real}(points::Vector{T}, t::Real=1)
+    n = length(points)
+    G = IntGraph(n)
+    for u=1:n-1
+        x = points[u]
+        for v=u+1:n
+            y = points[v]
+            if abs(x-y) <= t
+                add!(G,u,v)
+            end
+        end
+    end
+  return G
+end
+
+
+"""
+`RandomUnitIntervalGraph(n,t)` creates a unit interval graph with `n`
+vertices whose left end points are chosen iid uniformly from [0,1] and
+whose lengths are all given by `t` (default value 0.5).
+"""
+function RandomUnitIntervalGraph(n::Int, t::Real=0.5)
+    x = rand(n)
+    return UnitIntervalGraph(x,t)
+end

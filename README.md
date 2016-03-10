@@ -30,6 +30,17 @@ interval digraphs.
 
 + `RandomIntervalGraph(n)` creates a random `n`-vertex interval graph.
 
+### Unit interval graphs
+
++ `UnitIntervalGraph(x,t)` creates a unit interval graph in which the
+  left end points of the intervals are given in the vector `x` and the
+  lengths of the intervals is `t`.
+
++ `RandomUnitIntervalGraph(n,t)` creates a random unit interval graph
+  in which the left end points are `n` iid uniform values in [0,1] and
+  `t` is the length of the intervals.
+
+
 ### Directed interval graphs
 
 #### Type I
@@ -55,6 +66,9 @@ interval digraphs.
 
 + `RandomIntervalDigraph2(n)` creates an `n`-vertex random type II
   interval digraph.
+
+
+
 
 
 ## Permutation graphs
