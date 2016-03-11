@@ -36,6 +36,10 @@ interval digraphs.
   left end points of the intervals are given in the vector `x` and the
   lengths of the intervals is `t`.
 
++ `UnitIntervalGraph(f,t)` creates a unit interval graph from a dictionary
+  `f` mapping vertex names to the left end points of the intervals.
+  The optional parameter `t` gives the length of the intervals.
+
 + `RandomUnitIntervalGraph(n,t)` creates a random unit interval graph
   in which the left end points are `n` iid uniform values in [0,1] and
   `t` is the length of the intervals.

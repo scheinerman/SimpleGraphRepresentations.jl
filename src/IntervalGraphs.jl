@@ -277,6 +277,31 @@ function UnitIntervalGraph{T<:Real}(points::Vector{T}, t::Real=1)
   return G
 end
 
+"""
+`UnitIntervalGraph(f,t=1)` creates a unit interval graph from a
+dictionary mapping vertex names to the left end points of their
+intervals. The optional parameter `t` specifies the length of the
+intervals.
+"""
+function UnitIntervalGraph{S,T<:Real}(f::Dict{S,T}, t::Real=1)
+  vtcs = collect(keys(f))
+  n = length(vtcs)
+  G = SimpleGraph{S}()
+  for v in vtcs
+    add!(G,v)
+  end
+
+  for i=1:n-1
+    u=vtcs[i]
+    for j=i+1:n
+      v=vtcs[j]
+      if abs(f[u]-f[v]) <= t
+        add!(G,u,v)
+      end
+    end
+  end
+  return G
+end
 
 """
 `RandomUnitIntervalGraph(n,t)` creates a unit interval graph with `n`
