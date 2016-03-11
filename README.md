@@ -19,7 +19,7 @@ The functions in this module deal with the following types of graphs:
 We provide the following functions for creating interval graphs and
 interval digraphs.
 
-### Undirected interval graphs
+### Interval graphs (standard)
 
 + `IntervalGraph(Jlist)` creates an interval graph from a list of
   closed intervals. The vertices are numbered `1` to `n` (where `n` is
