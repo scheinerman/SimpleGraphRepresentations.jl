@@ -44,6 +44,15 @@ interval digraphs.
   in which the left end points are `n` iid uniform values in [0,1] and
   `t` is the length of the intervals.
 
++ `UnitIntervalGraphEvolution(pts)` gives the sequence of edges add as
+  the lengths of the intervals (whose left end points are given in
+  `pts`) increases. This returns a pair consisting of the sequence of
+  edges and the lengths at which those edges appear.
+
++ `UnitIntervalGraphEvolution(n::Int)` is equivalent to
+  `UnitIntervalGraphEvolution(rand(n))`.
+
+
 
 ### Directed interval graphs
 
@@ -70,8 +79,6 @@ interval digraphs.
 
 + `RandomIntervalDigraph2(n)` creates an `n`-vertex random type II
   interval digraph.
-
-
 
 
 

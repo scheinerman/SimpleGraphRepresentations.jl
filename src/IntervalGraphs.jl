@@ -3,9 +3,7 @@
 export IntervalGraph, IntervalDigraph1, IntervalDigraph2
 export RandomIntervalGraph, RandomIntervalDigraph1, RandomIntervalDigraph2
 export UnitIntervalGraph, RandomUnitIntervalGraph
-
-# Create an interval graph given a 1-dimensional array of
-# ClosedInterval's.
+export UnitIntervalGraphEvolution
 
 """
 `IntervalGraph(Jlist)` creates an interval graph from a list of closed
@@ -121,6 +119,7 @@ end
 whose keys are the names of the vertices and whose values are
 intervals.
 """
+
 function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
     klist = collect(keys(f))
     G = SimpleGraph{K}()
@@ -249,6 +248,7 @@ end
 `RandomIntervalDigraph2(n::Int)` generates a random type II
 directed interval graph with `n` vertices.
 """
+
 function RandomIntervalDigraph2(n::Int)
     snd_list = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
     rec_list  = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
@@ -284,23 +284,23 @@ intervals. The optional parameter `t` specifies the length of the
 intervals.
 """
 function UnitIntervalGraph{S,T<:Real}(f::Dict{S,T}, t::Real=1)
-  vtcs = collect(keys(f))
-  n = length(vtcs)
-  G = SimpleGraph{S}()
-  for v in vtcs
-    add!(G,v)
-  end
-
-  for i=1:n-1
-    u=vtcs[i]
-    for j=i+1:n
-      v=vtcs[j]
-      if abs(f[u]-f[v]) <= t
-        add!(G,u,v)
-      end
+    vtcs = collect(keys(f))
+    n = length(vtcs)
+    G = SimpleGraph{S}()
+    for v in vtcs
+        add!(G,v)
     end
-  end
-  return G
+
+    for i=1:n-1
+        u=vtcs[i]
+        for j=i+1:n
+            v=vtcs[j]
+            if abs(f[u]-f[v]) <= t
+                add!(G,u,v)
+            end
+        end
+    end
+    return G
 end
 
 """
@@ -312,3 +312,41 @@ function RandomUnitIntervalGraph(n::Int, t::Real=0.5)
     x = rand(n)
     return UnitIntervalGraph(x,t)
 end
+
+"""
+`UnitIntervalGraphEvolution(points)` gives the sequence of edges as
+the lengths of the intervals (whose left end points are specified in
+`points`) increases.
+
+This returns a pair consisting of the sequence of edges and the
+lengths at which those edges appear.
+"""
+
+function UnitIntervalGraphEvolution{S<:Real}(points::Vector{S})
+    n = length(points)
+    nC2 = round(Int,n*(n-1)/2)
+
+    edges = Vector{Tuple{Int,Int}}(nC2)
+    diffs = Vector{S}(nC2)
+
+    idx = 0
+
+    for i=1:n-1
+        for j=i+1:n
+            idx += 1
+            edges[idx] = (i,j)
+            diffs[idx] = abs(points[i] - points[j])
+        end
+    end
+
+    p = sortperm(diffs)
+
+    return (edges[p], diffs[p])
+    
+end
+
+"""
+`UnitIntervalGraphEvolution(n::Int)` is equivalent to
+`UnitIntervalGraphEvolution(rand(n))`.
+"""
+UnitIntervalGraphEvolution(n::Int)=UnitIntervalGraphEvolution(rand(n))
