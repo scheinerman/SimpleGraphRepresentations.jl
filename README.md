@@ -50,7 +50,7 @@ interval digraphs.
   edges and the lengths at which those edges appear.
 
 + `UnitIntervalGraphEvolution(n::Int)` is equivalent to
-  `UnitIntervalGraphEvolution(rand(n))`.
+  `UnitIntervalGraphEvolution(sort(rand(n)))`.
 
 
 

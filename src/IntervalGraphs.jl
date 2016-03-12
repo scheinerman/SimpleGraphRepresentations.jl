@@ -347,6 +347,7 @@ end
 
 """
 `UnitIntervalGraphEvolution(n::Int)` is equivalent to
-`UnitIntervalGraphEvolution(rand(n))`.
+`UnitIntervalGraphEvolution(sort(rand(n)))`.
 """
-UnitIntervalGraphEvolution(n::Int)=UnitIntervalGraphEvolution(rand(n))
+UnitIntervalGraphEvolution(n::Int)=
+    UnitIntervalGraphEvolution(sort(rand(n)))
