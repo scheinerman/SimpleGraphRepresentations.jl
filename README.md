@@ -97,10 +97,16 @@ Create permutation graphs from one or two `Permutation` objects.
   be pairs of numbers. That is, `d`'s type should be
   `Dict{Vtype, Tuple{R1,R2}}` where `Vtype` is the type of the
   vertices and `R1` and `R2` are subtypes of `Real`.
+  
++ `PermutationGraph(f,g)` where `f` and `g` are `Dict`s mapping
+  a vertex set to real values. 
 
 + `RandomPermutationGraph(n)` creates an `n`-vertex random permutation
   graph.
 
++ `PermutationRepresentation(G)` creates a pair of dictionaries
+  from the vertex set of `G` to integers. These mappings are a
+  permutation representation of `G`.
 
 
 
@@ -181,5 +187,7 @@ intervals exceeds either tolerance.
 
 ## Acknowledgement
 
-The `CreationSequence` and `ThresholdRepresentation` functions were
-contributed by Tara Abrishami.
+Thanks to Tara Abrishami for contributing these functions:
++ `CreationSequence`
++ `ThresholdRepresentation`
++ `PermutationRepresentation`

@@ -48,9 +48,7 @@ dictionary that maps vertex names to pairs of real numbers.
 The vertex type of the resulting graph is the key type of `d`.
 The values in `d` must be all `Tuple{S,T}` where `S` and `T` are
 subtypes of `Real`. For example, declare `d` like this:
-```
-d = Dict{ASCIIString, Tuple{Int,Int}}()
-```
+`d = Dict{ASCIIString, Tuple{Int,Int}}()`.
 """
 function PermutationGraph{VV, S<:Real, T<:Real}(d::Dict{VV,Tuple{S,T}})
     vtcs = collect(keys(d))
@@ -70,6 +68,22 @@ function PermutationGraph{VV, S<:Real, T<:Real}(d::Dict{VV,Tuple{S,T}})
         end
     end
     return G
+end
+
+
+"""
+`PermutationGraph(f::Dict,g::Dict)` constructs a permutation graph
+from a pair of mappings from a vertex set to real values.
+"""
+function PermutationGraph{T,R<:Real,S<:Real}(f::Dict{T,R},g::Dict{T,S})
+    # mush the two dictionaries into one
+    h = Dict{T,Tuple{R,S}}()
+    for k in keys(f)
+        h[k] = f[k],g[k]
+    end
+
+    # invoke previous method
+    return PermutationGraph(h)
 end
 
 """
