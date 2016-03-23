@@ -108,7 +108,11 @@ Create permutation graphs from one or two `Permutation` objects.
   from the vertex set of `G` to integers. These mappings are a
   permutation representation of `G`.
 
-
+**Note**: We include an extra file in the `src` directory entitled
+`PermutationRepresentationDrawing` that includes code for 
+visualizing permutation representations of graphs. Sampel output for one is shown here:
+![](rep.png)
+This code required `PyPlot`.
 
 ## Threshold graphs
 
