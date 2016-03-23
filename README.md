@@ -110,7 +110,8 @@ Create permutation graphs from one or two `Permutation` objects.
 
 **Note**: We include an extra file in the `src` directory entitled
 `PermutationRepresentationDrawing` that includes code for 
-visualizing permutation representations of graphs. Sampel output for one is shown here:
+visualizing permutation representations of graphs. 
+Sample output for one is shown here:
 
 ![](rep.png)
 
