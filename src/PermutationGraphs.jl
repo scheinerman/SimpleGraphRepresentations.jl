@@ -1,4 +1,5 @@
 export PermutationGraph, RandomPermutationGraph
+export PermutationRepresentation
 
 """
 `perm_adj(a,b)` is used to test for adajency in permutation graphs.
@@ -94,4 +95,45 @@ function RandomPermutationGraph(n::Int)
     p = RandomPermutation(n)
     q = RandomPermutation(n)
     return PermutationGraph(p,q)
+end
+
+
+"""
+`PermutationRepresentation(G)` returns a pair of dictionaries mapping
+the vertices of `G` to integers. This pair of dictionaries form a
+permutation representation of `G`. (If `G` is not a permutation graph,
+an error is thrown.
+"""
+function PermutationRepresentation(G::SimpleGraph)
+    A = SimpleDigraph()
+    try
+        A = transitive_orientation(complement(G))
+    catch
+    error("This graph does not have a permutation representation")
+    end
+    G1 = deepcopy(A)
+    G2 = transitive_orientation(G)
+    for e in elist(G2)
+        add!(G1, e[1], e[2])
+    end
+    T = vertex_type(G)
+    sigma = Dict{T, Int}()
+    tau = Dict{T, Int}()
+    vs1 = sort(vlist(G1), by = v-> out_deg(G1, v), rev=true)
+    i = 1
+    for v in vs1
+        sigma[v] = i
+        i = i+1
+    end
+    G3 = deepcopy(A)
+    for e in elist(G2)
+        add!(G3, e[2], e[1])
+    end
+    vs2 = sort(vlist(G3), by = v-> out_deg(G3, v), rev=true)
+    j = 1;
+    for v in vs2
+        tau[v] = j
+        j = j+1
+    end
+    return sigma,tau
 end
