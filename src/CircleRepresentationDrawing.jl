@@ -5,7 +5,7 @@ implicit in `list`. Requires `PyPlot`. Not exporting this for that
 reason.
 """
 function CircleRepresentationDrawing{T}(list::Array{T,1},labels::Bool=true)
-  positions = list2locs(list)
+  positions = SimpleGraphRepresentations.list2locs(list)
   nn = length(list)
   verts = collect(keys(positions))
   clf()
