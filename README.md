@@ -204,6 +204,8 @@ exactly twice.
 + `RandomCircleGraph(n)` creates a random circle
 graph with vertex set `1:n`.
 
+![](circle-graph-example.png)
+
 
 ## Acknowledgement
 
