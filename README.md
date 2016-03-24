@@ -12,6 +12,9 @@ The functions in this module deal with the following types of graphs:
 + Interval graphs (and interval digraphs)
 + Permutation graphs
 + Threshold graphs
++ Tolerance graphs
++ Geometric graphs
++ Circle graphs
 + Intersection graphs (of finite sets)
 
 ## Interval graphs
@@ -80,8 +83,6 @@ interval digraphs.
 + `RandomIntervalDigraph2(n)` creates an `n`-vertex random type II
   interval digraph.
 
-
-
 ## Permutation graphs
 
 Create permutation graphs from one or two `Permutation` objects.
@@ -97,9 +98,9 @@ Create permutation graphs from one or two `Permutation` objects.
   be pairs of numbers. That is, `d`'s type should be
   `Dict{Vtype, Tuple{R1,R2}}` where `Vtype` is the type of the
   vertices and `R1` and `R2` are subtypes of `Real`.
-  
+
 + `PermutationGraph(f,g)` where `f` and `g` are `Dict`s mapping
-  a vertex set to real values. 
+  a vertex set to real values.
 
 + `RandomPermutationGraph(n)` creates an `n`-vertex random permutation
   graph.
@@ -109,8 +110,8 @@ Create permutation graphs from one or two `Permutation` objects.
   permutation representation of `G`.
 
 **Note**: We include an extra file in the `src` directory entitled
-`PermutationRepresentationDrawing` that includes code for 
-visualizing permutation representations of graphs. 
+`PermutationRepresentationDrawing` that includes code for
+visualizing permutation representations of graphs.
 Sample output for one is shown here:
 
 ![](rep.png)
@@ -190,6 +191,18 @@ intervals exceeds either tolerance.
   f = Dict{ASCIIString, Tuple{ClosedInterval{Int},Float64}}()
   f["alpha"] = ( ClosedInterval(3,6), 0.2 )
   ```
+
+## Circle graphs
+
+A *circle graph* is the intersection graph of the
+chords of a circle. We provide the following:
+
++ `CircleGraph(list)` creates a circle graph where
+`list` is a list of elements each of which appears
+exactly twice.
+
++ `RandomCircleGraph(n)` creates a random circle
+graph with vertex set `1:n`.
 
 
 ## Acknowledgement

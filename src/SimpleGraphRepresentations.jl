@@ -10,5 +10,5 @@ include("ThresholdGraphs.jl")
 include("IntersectionGraphs.jl")
 include("GeometricGraphs.jl")
 include("ToleranceGraphs.jl")
-
+include("CircleGraphs.jl")
 end # end of module
