@@ -199,7 +199,8 @@ chords of a circle. We provide the following:
 
 + `CircleGraph(list)` creates a circle graph where
 `list` is a list of elements each of which appears
-exactly twice.
+exactly twice. Here, list is typically an `Array` but
+may also be an `ASCIIString`.
 
 + `RandomCircleGraph(n)` creates a random circle
 graph with vertex set `1:n`.

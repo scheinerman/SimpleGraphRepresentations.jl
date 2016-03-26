@@ -65,6 +65,16 @@ function CircleGraph{T}(list::Array{T,1})
 end
 
 """
+`CircleGraph(str::ASCIIString)` creates a circle graph from
+a string of ASCII characters; each character must appear exactly
+twice in the string.
+"""
+function CircleGraph(str::ASCIIString)
+  list = [ch for ch in str]
+  return CircleGraph(list)
+end
+
+"""
 `RandomCircleRepresentation(n)` returns a `2n` long list
 consisting of the numbers `1:n` each exacty twice in some
 random order.
