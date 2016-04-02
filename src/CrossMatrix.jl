@@ -32,3 +32,16 @@ function CrossMatrix{T}(list::Array{T,1})
   end
   return A
 end
+
+function find_example(n::Int)
+  if mod(n,2) == 1
+    error("n = $n is not even")
+  end
+  while true
+    lst = RandomCircleRepresentation(n)
+    A = CrossMatrix(lst)
+    if rank(A) == n
+      return lst,A
+    end
+  end
+end
