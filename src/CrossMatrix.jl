@@ -33,6 +33,15 @@ function CrossMatrix{T}(list::Array{T,1})
     return A
 end
 
+"""
+`find_example(n::Int)` looks for a circle representation whose cross
+join matrix has determinant equal to 1. Returns a triple: 
+
+* `lst`: the representation
+* `A`: the cross join matrix
+* `G`: the corresponding circle graph
+```
+"""
 function find_example(n::Int)
     if mod(n,2) == 1
         error("n = $n is not even")
@@ -40,8 +49,24 @@ function find_example(n::Int)
     while true
         lst = RandomCircleRepresentation(n)
         A = CrossMatrix(lst)
+        G = CircleGraph(G)
         if rank(A) == n
-            return lst,A
+            return lst,A,G
+        end
+    end
+end
+
+"""
+`find_non_example(n)` is like `find_example`, except we want a
+singular cross join matrix.
+"""
+function find_non_example(n::Int)
+    while true
+        lst = RandomCircleRepresentation(n)
+        A = CrossMatrix(lst)
+        G = CircleGraph(lst)
+        if rank(A) < n && is_connected(G)
+            return lst,A,G
         end
     end
 end
