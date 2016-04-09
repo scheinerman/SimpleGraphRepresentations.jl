@@ -68,7 +68,7 @@ function RainbowDrawing{T}(list::Array{T,1})
   nn = length(list)
   verts = collect(keys(positions))
   clf()
-  gap = -0.25
+  gap = -0.5
   for v in verts
     p = positions[v]
     semicircle(p[1],p[2])
