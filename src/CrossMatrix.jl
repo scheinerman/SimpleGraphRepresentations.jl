@@ -13,9 +13,9 @@ function CrossMatrix{T}(list::Array{T,1})
     try
         sort!(elts)
     end
-    
+
     A = zeros(Int,n,n)
-    
+
     for i=1:n
         v = elts[i]
         a = positions[v]
@@ -35,7 +35,7 @@ end
 
 """
 `find_example(n::Int)` looks for a circle representation whose cross
-join matrix has determinant equal to 1. Returns a triple: 
+join matrix has determinant equal to 1. Returns a triple:
 
 * `lst`: the representation
 * `A`: the cross join matrix
@@ -49,7 +49,7 @@ function find_example(n::Int)
     while true
         lst = RandomCircleRepresentation(n)
         A = CrossMatrix(lst)
-        G = CircleGraph(G)
+        G = CircleGraph(lst)
         if rank(A) == n
             return lst,A,G
         end
