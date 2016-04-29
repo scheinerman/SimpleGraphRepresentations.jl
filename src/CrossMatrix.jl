@@ -73,22 +73,29 @@ function jump_over_right{T}(list::Array{T,1}, i::Int)
   end
 
   if fs[i] == 1
-    println("intersecting")
+    #println("intersecting")
     a = list[i+1]
     b = list[i]
     b_locs = find(list .== b)
     j = b_locs[2]
     idx = [ collect(1:i); collect(i+2:j-1); i+1; collect(j:n) ]
   else
-    println("disjoint")
+    #println("disjoint")
     a = list[i]
     b = list[i+1]
     b_locs = find(list .== b)
     j = b_locs[2]
     idx = [ collect(1:i-1); collect(i+1:j); i; collect(j+1:n)]
   end
-  println(idx)
+  #println(idx)
   return list[idx]
+end
+
+function jump_over_left{T}(list::Array{T,1}, i::Int)
+  rev_list = reverse(list)
+  n = length(list)
+  rev_ans  = jump_over_right(rev_list, i)
+  return reverse(rev_ans)
 end
 
 
@@ -110,6 +117,14 @@ function build_jump_graph{T}(list::Array{T,1})
       add!(G,current,next)
       push!(todo,next)
     end
+    jump_list = find_jumps(reverse(current))
+    for i in jump_list
+      next = jump_over_left(current,i)
+      add!(G,current,next)
+      push!(todo,next)
+    end
+
+
     push!(done,current)
   end
   return G
