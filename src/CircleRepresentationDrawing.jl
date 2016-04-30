@@ -67,7 +67,7 @@ function RainbowDrawing{T}(list::Array{T,1})
   positions = SimpleGraphRepresentations.list2locs(list)
   nn = length(list)
   verts = collect(keys(positions))
-  clf()
+  #clf()
   gap = -0.5
   for v in verts
     p = positions[v]

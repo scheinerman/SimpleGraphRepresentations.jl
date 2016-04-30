@@ -1,3 +1,10 @@
+using SimpleGraphs
+using SimpleGraphRepresentations
+using SimpleGraphDrawings
+using PyPlot
+using LatexPrint
+include("CircleRepresentationDrawing.jl")
+
 """
 `CrossMatrix(list)` takes a circle representation list
 and produces a signed adjacency matrix of the corresponding
@@ -98,16 +105,29 @@ function jump_over_left{T}(list::Array{T,1}, i::Int)
   return reverse(rev_ans)
 end
 
+function rotate{T}(list::Array{T,1})
+  n = length(list)
+  result = Array{T,1}(n)
+  for i=2:n
+    result[i] = list[i-1]
+  end
+  result[1] = list[n]
+  return result
+end
 
-function build_jump_graph{T}(list::Array{T,1})
+function build_jump_graph{T}(list::Array{T,1}, early_quit::Bool=true)
   todo = []
   done = Set()
   push!(todo,list)
-  G = SimpleGraph()
+  G = SimpleGraph{Array{T,1}}()
   add!(G,list)
 
   while length(todo)>0
     current = pop!(todo)
+    if early_quit && maximum(deg(CircleGraph(current))) <= 1
+      return G
+    end
+
     if in(current,done)
       continue
     end
@@ -123,9 +143,71 @@ function build_jump_graph{T}(list::Array{T,1})
       add!(G,current,next)
       push!(todo,next)
     end
+    next = rotate(current)
+    add!(G,current,next)
+    push!(todo,next)
 
 
     push!(done,current)
   end
   return G
+end
+
+
+function path2caravan{T}(list::Array{T,1})
+  G = build_jump_graph(list)
+  for v in G.V
+    H = CircleGraph(v)
+    if maximum(deg(H)) <= 1
+      p = find_path(G,list,v)
+      return p
+    end
+  end
+  error("Cannot reduce to a caravan")
+end
+
+function caravan_demo_latex{T}(list::Array{T,1})
+  P = path2caravan(list)
+  np = length(P)
+  println("Reduce to caravan in $np steps")
+  F = open("caravan.tex","w")
+
+  println(F,"\\documentclass[12pt]{article}")
+  println(F,"\\usepackage{graphicx}")
+  println(F,"\\usepackage{txfonts}")
+  println(F,"\\usepackage[margin=1in]{geometry}")
+  println(F,"\\begin{document}")
+
+  for i=1:np
+    a = P[i]
+    G = CircleGraph(a)
+    X = SimpleGraphDrawing(G)
+    spectral!(X)
+    stress!(X)
+    figure(1)
+    clf()
+    set_vertex_size(20)
+    draw(X); draw_labels(X)
+    savefig("graph-$i.pdf")
+    clf()
+    RainbowDrawing(a)
+    savefig("rainbow-$i.pdf")
+    A = CrossMatrix(a)
+
+    println(F,"\\begin{center}")
+    println(F,"\\includegraphics[width=0.5\\textwidth]{graph-$i-crop}\\\\")
+    println(F,"\\bigbreak\\hrule\\bigbreak")
+    println(F,"\\includegraphics[width=0.75\\textwidth]{rainbow-$i-crop}\\\\")
+    println(F,"\\[")
+    lap(F,A)
+    println(F,"\\]")
+    println(F,"\\end{center}")
+    if i < np
+      println(F,"\\newpage")
+    end
+
+  end
+  println(F,"\\end{document}")
+  close(F)
+  close()
 end
