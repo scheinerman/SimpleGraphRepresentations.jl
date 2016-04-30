@@ -166,10 +166,24 @@ function path2caravan{T}(list::Array{T,1})
   error("Cannot reduce to a caravan")
 end
 
+function trim_caravan_path{T}(P::Array{Array{T,1},1})
+  n = length(P)
+  for k=1:n
+    G = CircleGraph(P[k])
+    if maximum(deg(G))<=1
+      return P[1:k]
+    end
+  end
+  return P
+end
+
+
 function caravan_demo_latex{T}(list::Array{T,1})
   P = path2caravan(list)
+  P = trim_caravan_path(P)
   np = length(P)
   println("Reduce to caravan in $np steps")
+  run(`make very-clean`)
   F = open("caravan.tex","w")
 
   println(F,"\\documentclass[12pt]{article}")
@@ -210,4 +224,5 @@ function caravan_demo_latex{T}(list::Array{T,1})
   println(F,"\\end{document}")
   close(F)
   close()
+  run(`make view`)
 end
