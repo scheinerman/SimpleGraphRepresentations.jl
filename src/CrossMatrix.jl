@@ -3,6 +3,7 @@ using SimpleGraphRepresentations
 using SimpleGraphDrawings
 using PyPlot
 using LatexPrint
+using ProgressMeter
 include("CircleRepresentationDrawing.jl")
 
 """
@@ -176,6 +177,23 @@ function trim_caravan_path{T}(P::Array{Array{T,1},1})
   end
   return P
 end
+
+"""
+`average_det(n,reps)`: Generate random circle graphs
+and report the average determinant of their cross
+matrix.
+"""
+function average_det(n::Int, reps::Int=1000)
+  total = 0.0
+  P = Progress(reps,1)
+  for k=1:reps
+    A = CrossMatrix(RandomCircleRepresentation(n))
+    total += det(A)
+    next!(P)
+  end
+  return total/reps
+end
+
 
 
 function caravan_demo_latex{T}(list::Array{T,1})
