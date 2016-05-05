@@ -188,7 +188,7 @@ function average_det(n::Int, reps::Int=1000)
   P = Progress(reps,1)
   for k=1:reps
     A = CrossMatrix(RandomCircleRepresentation(n))
-    total += det(A)
+    total += round(det(A))
     next!(P)
   end
   return total/reps
