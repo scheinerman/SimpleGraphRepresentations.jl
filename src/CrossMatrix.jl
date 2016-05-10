@@ -245,3 +245,72 @@ function caravan_demo_latex{T}(list::Array{T,1})
   close()
   run(`make view`)
 end
+
+
+"""
+`find_example(n,ngoal)`
+Find an example of a connected circle graph with a given
+cross matrix nullity.
+"""
+function find_example(n::Int, ngoal::Int=0)
+  while true
+    seq = RandomCircleRepresentation(n)
+    G = CircleGraph(seq)
+    if !is_connected(G)
+      continue
+    end
+    A = CrossMatrix(seq)
+    r = rank(A)
+    if r == n-ngoal
+      return G,seq,A
+    end
+  end
+end
+
+"""
+`find_example_tex(n,ngoal)`
+"""
+function find_example_tex(n::Int, ngoal::Int=0)
+  G,seq,A = find_example(n,ngoal)
+  X = SimpleGraphDrawing(G)
+  spectral!(X)
+  spring!(X)
+  stress!(X)
+  figure(1)
+  set_vertex_size(20)
+  clf(); draw(X); draw_labels(X)
+  savefig("graph.pdf")
+  run(`pdfcrop graph.pdf`)
+  figure(2)
+  clf(); CircleRepresentationDrawing(seq)
+  savefig("rep.pdf")
+  run(`pdfcrop rep.pdf`)
+  
+
+
+  lap(A)
+
+  F = open("example.tex","w")
+
+  println(F,"\\documentclass[12pt]{article}")
+  println(F,"\\usepackage{graphicx}")
+  println(F,"\\usepackage{txfonts}")
+  println(F,"\\usepackage[margin=0.75in]{geometry}")
+  println(F,"\\begin{document}")
+  println(F,"\\begin{center}")
+  println(F,"$n vertices with nullity $ngoal \\\\")
+  println(F,"\\includegraphics[width=0.45\\textwidth]{graph-crop}  ")
+  println(F,"\\includegraphics[width=0.45\\textwidth]{rep-crop} \\\\")
+  println(F,"\\[")
+  println(F,latex_form(A))
+  println(F,"\\]")
+  println(F,"\\end{center}")
+  println(F,"\\end{document}")
+
+  close(F)
+  run(`pdflatex example`)
+  run(`launch example.pdf`)
+
+
+  return G,seq,A
+end
