@@ -285,7 +285,7 @@ function find_example_tex(n::Int, ngoal::Int=0)
   clf(); CircleRepresentationDrawing(seq)
   savefig("rep.pdf")
   run(`pdfcrop rep.pdf`)
-  
+
 
 
   lap(A)
@@ -313,4 +313,29 @@ function find_example_tex(n::Int, ngoal::Int=0)
 
 
   return G,seq,A
+end
+
+
+function rank_indicator_vec{T}(list::Array{T,1})
+  n = round(Int,length(list)/2)
+  result = zeros(Int,n)
+  A = CrossMatrix(list)
+  r = round(Int,rank(A))
+  if n>0
+    result[r] = 1
+  else
+    warn("Rank zero skipped")
+  end
+  return result
+end
+
+
+function rand_hist(n::Int, reps::Int = 1000)
+  result = zeros(Int,n)
+  P = Progress(reps,1)
+  for j=1:reps
+    result += rank_indicator_vec(RandomCircleRepresentation(n))
+    next!(P)
+  end
+  return result /= reps
 end
