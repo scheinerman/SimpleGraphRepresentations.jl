@@ -1,4 +1,5 @@
 export CircleGraph, RandomCircleGraph, RandomCircleRepresentation
+export isCircleGraph
 
 """
 `list2locs(list)` takes a list of values as input. Every item on the list
@@ -91,4 +92,73 @@ vertices.
 """
 function RandomCircleGraph(n::Int)
   return CircleGraph(RandomCircleRepresentation(n))
+end
+
+
+# This code by Tara
+
+
+# returns true if G is a circle graph, false otherwise
+
+using SimpleGF2
+
+"""
+`isCircleGraph(G)` returns `true` if `G` is a circle graph
+and `false` otherwise.
+"""
+function isCircleGraph(G::SimpleGraphs.SimpleGraph)
+  V = vertex_type(G)
+  vertNum = Dict{V, Int}()
+  counter = 1
+  verts = length(vlist(G))
+  z = zeros(GF2, verts*verts + 1)
+  C = deepcopy(z)
+  vertices = vlist(G)
+  for v in vertices
+    vertNum[v] = counter
+    counter = counter + 1
+  end
+  for e in elist(G)
+    x = deepcopy(z)
+    x[(vertNum[e[1]]-1)*verts + vertNum[e[2]]] = 1
+    x[(vertNum[e[2]]-1)*verts + vertNum[e[1]]] = 1
+    x[verts*verts + 1] = 1
+    C = hcat(C, x)
+  end
+  n = length(vertices)
+  for v in vertices
+    for i in 1:n
+      for j in 1+i:n
+        v1 = vertices[i]
+        v2 = vertices[j]
+        if (has(G, v, v1) && !has(G, v, v2)) || (has(G, v, v2) && !has(G, v, v1)) || v == v1 || v == v2 || v1 == v2
+          continue
+        elseif has(G, v, v1) && has(G, v, v2)
+          if !has(G, v1, v2)
+            x = deepcopy(z)
+            x[(vertNum[v]-1)*verts + vertNum[v1]] = 1
+            x[(vertNum[v]-1)*verts + vertNum[v2]] = 1
+            x[(vertNum[v1]-1)*verts + vertNum[v2]] = 1
+            x[(vertNum[v2]-1)*verts + vertNum[v1]] = 1
+            x[verts*verts + 1] = 1
+            C = hcat(C, x)
+          end
+        elseif !has(G, v, v1) && !has(G, v, v2)
+          if has(G, v1, v2)
+            x = deepcopy(z)
+            x[(vertNum[v]-1)*verts + vertNum[v1]] = 1
+            x[(vertNum[v]-1)*verts + vertNum[v2]] = 1
+            C = hcat(C, x)
+          end
+        end
+      end
+    end
+  end
+  C = C'
+  try
+    solve_augmented(C)
+  catch
+    return false
+  end
+  return true
 end
