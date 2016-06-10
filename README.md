@@ -3,7 +3,7 @@
 The `SimpleGraphRepresentations` module is an extension of
 `SimpleGraphs`. It provides methods for dealing with intersection
 graphs and the like.
-This module requires my
+This module requires the `PyPlot`,
 `SimpleGraphs`, `ClosedIntervals`, and
 `Permutations` modules.
 
@@ -207,10 +207,15 @@ graph with vertex set `1:n`.
 
 ![](circle-graph-example.png)
 
+This representation drawing was created with `CircleRepresentationDrawing`.
+See also `RainbowDrawing`.
 
-## Acknowledgement
+
+## Acknowledgements
 
 Thanks to Tara Abrishami for contributing these functions:
+
 + `CreationSequence`
 + `ThresholdRepresentation`
 + `PermutationRepresentation`
++ `CircleRepresentation` (under development)

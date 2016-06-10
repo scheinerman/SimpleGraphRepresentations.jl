@@ -1,4 +1,7 @@
 using PyPlot
+
+export CircleRepresentationDrawing, RainbowDrawing
+
 """
 `CircleRepresentationDrawing(list)` draws the circle representation
 implicit in `list`. Requires `PyPlot`. Not exporting this for that
