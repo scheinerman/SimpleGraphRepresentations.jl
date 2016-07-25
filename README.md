@@ -210,6 +210,10 @@ graph with vertex set `1:n`.
 This representation drawing was created with `CircleRepresentationDrawing`.
 See also `RainbowDrawing`.
 
++ `CircleGraphRepresentation(G)` returns a circle graph representation of
+the graph `G` (or throws an error if the graph is not a circle graph).
+The current implementation works but is slow. New one is in the works. 
+
 
 ## Acknowledgements
 
@@ -218,4 +222,4 @@ Thanks to Tara Abrishami for contributing these functions:
 + `CreationSequence`
 + `ThresholdRepresentation`
 + `PermutationRepresentation`
-+ `CircleRepresentation` (under development)
++ `CircleGraphRepresentation`
