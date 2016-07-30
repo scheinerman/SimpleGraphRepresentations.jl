@@ -13,4 +13,5 @@ include("ToleranceGraphs.jl")
 include("CircleGraphs.jl")
 include("CircleRepresentationDrawing.jl")
 include("CircleGraphRepresentation.jl")
+include("Cographs.jl")
 end # end of module

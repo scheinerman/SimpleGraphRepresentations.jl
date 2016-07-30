@@ -118,6 +118,20 @@ Sample output for one is shown here:
 
 This code required `PyPlot`.
 
+
+## Cographs
+
+A *cograph* (also called a *complement reducible graph*) is
+formed from single vertex graphs via the operations join
+and disjoint union. We provide the following functions:
+
++ `RandomCograph(vlist)` creates a random cograph whose
+vertices are the elements of `vlist`.
++ `RandomCograph(n)` creates a random cograph whose
+vertices are `1:n`.
++ `is_cograph(G)` determines whether `G` is a cograph.
+
+
 ## Threshold graphs
 
 + `ThresholdGraph(wts)` creates a threshold graph from a list of
@@ -212,7 +226,7 @@ See also `RainbowDrawing`.
 
 + `CircleGraphRepresentation(G)` returns a circle graph representation of
 the graph `G` (or throws an error if the graph is not a circle graph).
-The current implementation works but is slow. New one is in the works. 
+The current implementation works but is slow. New one is in the works.
 
 
 ## Acknowledgements
