@@ -11,6 +11,7 @@ The functions in this module deal with the following types of graphs:
 
 + Interval graphs (and interval digraphs)
 + Permutation graphs
++ Cographs
 + Threshold graphs
 + Tolerance graphs
 + Geometric graphs
