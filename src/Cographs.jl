@@ -1,20 +1,20 @@
 export RandomCograph, is_cograph
 
 """
-`RandomCograph(vlist)` creates a random cograph with vertices
-in `vlist`.
+`RandomCograph(vtcs)` creates a random cograph with vertices
+in `vtcs`.
 
 `RandomCograph(n)` creates a random cograph with vertex set `1:n`.
 """
-function RandomCograph{T}(vlist::Vector{T})
+function RandomCograph{T}(vtcs::Vector{T})
   G = SimpleGraph{T}()
 
   # basis cases
-  if length(vlist) == 0
+  if length(vtcs) == 0
     return G
   end
-  if length(vlist) == 1
-    add!(G,vlist[1])
+  if length(vtcs) == 1
+    add!(G,vtcs[1])
     return G
   end
 
@@ -22,7 +22,9 @@ function RandomCograph{T}(vlist::Vector{T})
   alist = Vector{T}()
   blist = Vector{T}()
   while length(alist)==0 || length(blist)==0
-    for v in vlist
+    alist = Vector{T}()
+    blist = Vector{T}()
+    for v in vtcs
       if rand() < 0.5
         push!(alist,v)
       else
