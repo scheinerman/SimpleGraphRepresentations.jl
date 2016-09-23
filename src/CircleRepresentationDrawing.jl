@@ -40,10 +40,10 @@ function CircleRepresentationDrawing{T}(list::Array{T,1},labels::Bool=true)
 end
 
 """
-`CircleRepresentationDrawing(str::ASCIIString)` uses `str` as the
+`CircleRepresentationDrawing(str::String)` uses `str` as the
 list of symbols.
 """
-function CircleRepresentationDrawing(str::ASCIIString, labels::Bool=true)
+function CircleRepresentationDrawing(str::String, labels::Bool=true)
   list = [ch for ch in str]
   CircleRepresentationDrawing(list,labels)
 end
