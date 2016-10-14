@@ -79,7 +79,7 @@ function is_cograph{T}(G::SimpleGraph{T})
     return is_cograph(GG)
   end
 
-  clist = components(G)
+  clist = parts(components(G))
   for A in clist
     H = induce(G,A)
     if !is_cograph(H)

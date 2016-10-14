@@ -3,6 +3,7 @@ module SimpleGraphRepresentations
 using SimpleGraphs
 using Permutations
 using ClosedIntervals
+using SimplePartitions
 
 include("IntervalGraphs.jl")
 include("PermutationGraphs.jl")
