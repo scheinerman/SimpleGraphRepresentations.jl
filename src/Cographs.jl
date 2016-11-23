@@ -1,4 +1,4 @@
-export RandomCograph, is_cograph
+export RandomCograph, is_cograph, CographRepresentation
 
 """
 `RandomCograph(vtcs)` creates a random cograph with vertices
@@ -87,4 +87,57 @@ function is_cograph{T}(G::SimpleGraph{T})
     end
   end
   return true
+end
+
+
+
+"""
+`CographRepresentation(G::SimpleGraph)` returns a `String` that
+presents a construction of `G` using disjoint union `+` and join `*`.
+Throws an error if `G` is not a cograph.
+"""
+function CographRepresentation(G::SimpleGraph)
+  if NV(G)==0
+    return "()"
+  end
+  if NV(G)==1
+    v = first(G.V)
+    return "$v"
+  end
+
+  if is_connected(G)
+    comps = collect(parts(components(G')))
+    ncomps = length(comps)
+    if ncomps == 1
+      error("This is not a cograph")
+    end
+    result = ""
+    for k=1:ncomps
+      H = induce(G,comps[k])
+      if NV(H) > 1
+        result *= "(" * CographRepresentation(H) *")"
+      else
+        result *= CographRepresentation(H)
+      end
+      if k<ncomps
+        result *= "*"
+      end
+    end
+  else
+    comps = collect(parts(components(G)))
+    ncomps = length(comps)
+    result = ""
+    for k=1:ncomps
+      H = induce(G,comps[k])
+      if NV(H) > 1
+        result *= "(" * CographRepresentation(H) *")"
+      else
+        result *= CographRepresentation(H)
+      end
+      if k<ncomps
+        result *= "+"
+      end
+    end
+  end
+  return result
 end

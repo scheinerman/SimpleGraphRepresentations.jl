@@ -131,6 +131,8 @@ vertices are the elements of `vlist`.
 + `RandomCograph(n)` creates a random cograph whose
 vertices are `1:n`.
 + `is_cograph(G)` determines whether `G` is a cograph.
++ `CographRepresentation(G)` returns a `String` showing the construction
+of `G` as a cograph.
 
 
 ## Threshold graphs
