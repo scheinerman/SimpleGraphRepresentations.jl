@@ -67,7 +67,7 @@ function CircleGraphRepresentation(G::SimpleGraph)
   end
 
   ret = Array{Int}(0)
-  comps = components(G)
+  comps = collect(parts(components(G)))
   for c in comps
     lis = assignOrder(c, G, vertNum, sol, numVert)
     lis = mod(lis-1, verts) + 1
