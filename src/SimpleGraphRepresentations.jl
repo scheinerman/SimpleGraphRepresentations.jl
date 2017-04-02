@@ -5,6 +5,8 @@ using Permutations
 using ClosedIntervals
 using SimplePartitions
 
+import SimpleGraphs.cache_save 
+
 include("IntervalGraphs.jl")
 include("PermutationGraphs.jl")
 include("ThresholdGraphs.jl")

@@ -9,6 +9,9 @@ export CircleGraphRepresentation
 graph `G` or throws an error if there is none.
 """
 function CircleGraphRepresentation(G::SimpleGraph)
+  if cache_check(G,:CircleGraphRepresentation)
+    return cache_recall(G,:CircleGraphRepresentation)
+  end 
   V = vertex_type(G)
   numVert = Dict{Int, V}()
   vertNum = Dict{V, Int}()
