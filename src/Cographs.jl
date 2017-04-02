@@ -97,6 +97,10 @@ presents a construction of `G` using disjoint union `+` and join `*`.
 Throws an error if `G` is not a cograph.
 """
 function CographRepresentation(G::SimpleGraph)
+  if cache_check(G,:CographRepresentation)
+    return cache_recall(G,:CographRepresentation)
+  end
+
   if NV(G)==0
     return "()"
   end
@@ -139,5 +143,7 @@ function CographRepresentation(G::SimpleGraph)
       end
     end
   end
+
+  cache_save(G,:CographRepresentation,result)
   return result
 end

@@ -11,7 +11,7 @@ graph `G` or throws an error if there is none.
 function CircleGraphRepresentation(G::SimpleGraph)
   if cache_check(G,:CircleGraphRepresentation)
     return cache_recall(G,:CircleGraphRepresentation)
-  end 
+  end
   V = vertex_type(G)
   numVert = Dict{Int, V}()
   vertNum = Dict{V, Int}()
@@ -80,6 +80,7 @@ function CircleGraphRepresentation(G::SimpleGraph)
   for q in 1:length(ret)
     retn[q] = numVert[ret[q]]
   end
+  cache_save(G,:CircleGraphRepresentation,retn)
   return retn
 end
 

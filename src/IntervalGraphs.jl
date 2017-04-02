@@ -22,7 +22,7 @@ function IntervalGraph{T}(Jlist::Array{ClosedInterval{T},1})
             end
         end
     end
-
+    cache_save(G,:IntervalRepresentation,Jlist)
     return G
 end
 
@@ -138,6 +138,7 @@ function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
             end
         end
     end
+    cache_save(G,:IntervalRepresentation,f)
     return G
 end
 
@@ -342,7 +343,7 @@ function UnitIntervalGraphEvolution{S<:Real}(points::Vector{S})
     p = sortperm(diffs)
 
     return (edges[p], diffs[p])
-    
+
 end
 
 """
