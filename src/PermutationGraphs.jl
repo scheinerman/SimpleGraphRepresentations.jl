@@ -84,7 +84,9 @@ function PermutationGraph{T,R<:Real,S<:Real}(f::Dict{T,R},g::Dict{T,S})
     end
 
     # invoke previous method
-    return PermutationGraph(h)
+    G = PermutationGraph(h)
+    cache_save(G,:PermutationRepresentation,(f,g))
+    return G
 end
 
 """
@@ -105,6 +107,9 @@ permutation representation of `G`. (If `G` is not a permutation graph,
 an error is thrown.
 """
 function PermutationRepresentation(G::SimpleGraph)
+    if cache_check(G,:PermutationRepresentation)
+      return cache_recall(G,:PermutationRepresentation)
+    end
     A = SimpleDigraph()
     try
         A = transitive_orientation(complement(G))
@@ -135,5 +140,6 @@ function PermutationRepresentation(G::SimpleGraph)
         tau[v] = j
         j = j+1
     end
+    cache_save(G,:PermutationRepresentation, (sigma,tau))
     return sigma,tau
 end
