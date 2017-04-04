@@ -39,6 +39,7 @@ function ThresholdGraph{S,T<:Real}(dw::Dict{S,T})
         end
     end
     cache_save(G,:ThresholdRepresentation,dw)
+    cache_save(G,:name,"Threshold graph (n=$(NV(G)), m=$(NE(G)))")
     return G
 end
 

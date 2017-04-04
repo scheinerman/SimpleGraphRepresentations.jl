@@ -43,6 +43,7 @@ function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
         end
     end
     cache_save(G,:IntervalRepresentation,f)
+    cache_save(G,:name,"Interval graph (n=$(NV(G)), m=$(NE(G)))")
     return G
 end
 
@@ -258,19 +259,14 @@ vector `x` specifies the left end points of the intervals. The
 optional parameter `t` specifies the lengths of the intervals.
 """
 function UnitIntervalGraph{T<:Real}(points::Vector{T}, t::Real=1)
-    n = length(points)
-    G = IntGraph(n)
-    for u=1:n-1
-        x = points[u]
-        for v=u+1:n
-            y = points[v]
-            if abs(x-y) <= t
-                add!(G,u,v)
-            end
-        end
-    end
-  return G
+  n = length(points)
+  f = Dict{Int,T}()
+  for k=1:n
+    f[k] = points[k]
+  end
+  return UnitIntervalGraph(f,t)
 end
+
 
 """
 `UnitIntervalGraph(f,t=1)` creates a unit interval graph from a
@@ -295,6 +291,8 @@ function UnitIntervalGraph{S,T<:Real}(f::Dict{S,T}, t::Real=1)
             end
         end
     end
+    cache_save(G,:UnitIntervalRepresentation,(f,t))
+    cache_save(G,:name,"Unit interval graph (n=$(NV(G)), m=$(NE(G)))")
     return G
 end
 

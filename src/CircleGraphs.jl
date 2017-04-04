@@ -63,6 +63,7 @@ function CircleGraph{T}(list::Array{T,1})
   end
 
   cache_save(G,:CircleGraphRepresentation,list)
+  cache_save(G,:name,"Circle graph (n=$(NV(G)), m=$(NE(G)))")
   return G
 end
 

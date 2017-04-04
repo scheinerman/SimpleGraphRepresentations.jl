@@ -86,6 +86,7 @@ function PermutationGraph{T,R<:Real,S<:Real}(f::Dict{T,R},g::Dict{T,S})
     # invoke previous method
     G = PermutationGraph(h)
     cache_save(G,:PermutationRepresentation,(f,g))
+    cache_save(G,:name,"Permutation graph (n=$(NV(G)), m=$(NE(G)))")
     return G
 end
 
