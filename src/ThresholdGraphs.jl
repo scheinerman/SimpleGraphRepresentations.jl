@@ -1,23 +1,34 @@
 export ThresholdGraph, RandomThresholdGraph, CreationSequence, ThresholdRepresentation
 
+# function ThresholdGraph{T<:Real}(w::Array{T,1})
+#     n = length(w)
+#     G = IntGraph(n)
+#     for i=1:n-1
+#         for j=i+1:n
+#             if w[i]+w[j] >= 1
+#                 add!(G,i,j)
+#             end
+#         end
+#     end
+#     return G
+# end
+
+function ThresholdGraph{T<:Real}(w::Array{T,1})
+  n = length(w)
+  f = Dict{Int,T}()
+  for k=1:n
+    f[k] = w[k]
+  end
+  return ThresholdGraph(f)
+end
+
+
+
+
 """
 `ThresholdGraph(w)` creates a threshold graph using weights from the
 vector `w`.
-"""
-function ThresholdGraph{T<:Real}(w::Array{T,1})
-    n = length(w)
-    G = IntGraph(n)
-    for i=1:n-1
-        for j=i+1:n
-            if w[i]+w[j] >= 1
-                add!(G,i,j)
-            end
-        end
-    end
-    return G
-end
 
-"""
 `ThresholdGraph(dw)` creates a threshold graph from a dictionary
 mapping vertices to weights.
 """
@@ -41,6 +52,7 @@ function ThresholdGraph{S,T<:Real}(dw::Dict{S,T})
             end
         end
     end
+    cache_save(G,:ThresholdRepresentation,dw)
     return G
 end
 
@@ -63,7 +75,6 @@ creation sequence and `vtx_list` specifies the order in which the
 vertices are added when creating `G`. If `G` is not a threshold
 graph, then an error is raised.
 """
-
 function CreationSequence(G1::SimpleGraph)
     A = Int[]
     T = vertex_type(G1)
@@ -100,6 +111,9 @@ end
 weights. An error is raised if `G` is not a threshold graph.
 """
 function ThresholdRepresentation(G::SimpleGraph)
+    if cache_check(G,:ThresholdRepresentation)
+      return cache_recall(G,:ThresholdRepresentation)
+    end
     A,V = CreationSequence(G)
 
     prev::Int = 0
@@ -133,5 +147,6 @@ function ThresholdRepresentation(G::SimpleGraph)
         end
         prev = i
     end
+    cache_save(G,:ThresholdRepresentation,D)
     return D
 end

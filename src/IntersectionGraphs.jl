@@ -6,8 +6,7 @@ AnySet = Union{Set,IntSet}
 `IntersectionGraph(setlist)` creates an intersection graph on vertex set
 `1:n` from a list of `n` sets (all of type `Set` or all of type
 `IntSet`).
-"""return G
-# end
+"""
 
 function IntersectionGraph{T<:AnySet}(slist::Vector{T})
   n = length(slist)
