@@ -6,21 +6,7 @@ AnySet = Union{Set,IntSet}
 `IntersectionGraph(setlist)` creates an intersection graph on vertex set
 `1:n` from a list of `n` sets (all of type `Set` or all of type
 `IntSet`).
-"""
-# function IntersectionGraph{T<:AnySet}(slist::Vector{T})
-#     n = length(slist)
-#     G = IntGraph(n)
-#
-#     for u=1:n-1
-#         A = slist[u]
-#         for v=u+1:n
-#             B = slist[v]
-#             if length(intersect(A,B))>0
-#                 add!(G,u,v)
-#             end
-#         end
-#     end
-#     return G
+"""return G
 # end
 
 function IntersectionGraph{T<:AnySet}(slist::Vector{T})
@@ -31,7 +17,6 @@ function IntersectionGraph{T<:AnySet}(slist::Vector{T})
   end
   return IntersectionGraph(f)
 end
-
 
 """
 `IntersectionGraph(f)` creates an intersection graph from the
