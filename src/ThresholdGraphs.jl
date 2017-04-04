@@ -1,28 +1,5 @@
 export ThresholdGraph, RandomThresholdGraph, CreationSequence, ThresholdRepresentation
 
-# function ThresholdGraph{T<:Real}(w::Array{T,1})
-#     n = length(w)
-#     G = IntGraph(n)
-#     for i=1:n-1
-#         for j=i+1:n
-#             if w[i]+w[j] >= 1
-#                 add!(G,i,j)
-#             end
-#         end
-#     end
-#     return G
-# end
-
-function ThresholdGraph{T<:Real}(w::Array{T,1})
-  n = length(w)
-  f = Dict{Int,T}()
-  for k=1:n
-    f[k] = w[k]
-  end
-  return ThresholdGraph(f)
-end
-
-
 
 
 """
@@ -32,6 +9,15 @@ vector `w`.
 `ThresholdGraph(dw)` creates a threshold graph from a dictionary
 mapping vertices to weights.
 """
+function ThresholdGraph{T<:Real}(w::Array{T,1})
+  n = length(w)
+  f = Dict{Int,T}()
+  for k=1:n
+    f[k] = w[k]
+  end
+  return ThresholdGraph(f)
+end
+
 function ThresholdGraph{S,T<:Real}(dw::Dict{S,T})
     G = SimpleGraph{S}()
     vtcs = collect(keys(dw))
