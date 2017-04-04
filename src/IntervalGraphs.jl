@@ -43,7 +43,7 @@ function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
         end
     end
     cache_save(G,:IntervalRepresentation,f)
-    cache_save(G,:name,"Interval graph (n=$(NV(G)), m=$(NE(G)))")
+    cache_save(G,:name,"Interval graph")
     return G
 end
 
@@ -292,7 +292,7 @@ function UnitIntervalGraph{S,T<:Real}(f::Dict{S,T}, t::Real=1)
         end
     end
     cache_save(G,:UnitIntervalRepresentation,(f,t))
-    cache_save(G,:name,"Unit interval graph (n=$(NV(G)), m=$(NE(G)))")
+    cache_save(G,:name,"Unit interval graph")
     return G
 end
 

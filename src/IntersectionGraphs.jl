@@ -44,6 +44,6 @@ function IntersectionGraph{S,T<:AnySet}(f::Dict{S,T})
         end
     end
     cache_save(G,:IntersectionGraph,f)
-    cache_save(G,:name,"Intersection graph (n=$(NV(G)), m=$(NE(G)))")
+    cache_save(G,:name,"Intersection graph")
     return G
 end
