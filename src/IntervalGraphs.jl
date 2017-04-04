@@ -10,21 +10,43 @@ export UnitIntervalGraphEvolution
 intervals.
 """
 function IntervalGraph{T}(Jlist::Array{ClosedInterval{T},1})
-    n = length(Jlist)
-    G = IntGraph(n)
+  d = Dict{Int,ClosedInterval{T}}()
+  n = length(Jlist)
+  for k=1:n
+    d[k] = Jlist[k]
+  end
+  return IntervalGraph(d)
+end
 
-    for u = 1:n-1
-        J = Jlist[u]
-        for v = u+1:n
-            K = Jlist[v]
-            if !isempty(J*K)
+
+"""
+`IntervalGraph(f::Dict)` creates asn interval graph from a dictionary
+whose keys are the names of the vertices and whose values are
+intervals.
+"""
+function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
+    klist = collect(keys(f))
+    G = SimpleGraph{K}()
+    for v in klist
+        add!(G,v)
+    end
+
+    n = length(klist)
+
+    for i = 1:n-1
+        u = klist[i]
+        for j = i+1:n
+            v = klist[j]
+            if !isempty( f[u]*f[v] )
                 add!(G,u,v)
             end
         end
     end
-    cache_save(G,:IntervalRepresentation,Jlist)
+    cache_save(G,:IntervalRepresentation,f)
     return G
 end
+
+
 
 """
 `edge_helper(A,B)` for closed intervals `A` and `B` is a private
@@ -113,34 +135,6 @@ function IntervalDigraph2{T}(
     return G
 end
 
-
-"""
-`IntervalGraph(f::Dict)` creates asn interval graph from a dictionary
-whose keys are the names of the vertices and whose values are
-intervals.
-"""
-
-function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
-    klist = collect(keys(f))
-    G = SimpleGraph{K}()
-    for v in klist
-        add!(G,v)
-    end
-
-    n = length(klist)
-
-    for i = 1:n-1
-        u = klist[i]
-        for j = i+1:n
-            v = klist[j]
-            if !isempty( f[u]*f[v] )
-                add!(G,u,v)
-            end
-        end
-    end
-    cache_save(G,:IntervalRepresentation,f)
-    return G
-end
 
 
 """
