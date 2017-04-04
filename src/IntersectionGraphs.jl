@@ -7,20 +7,29 @@ AnySet = Union{Set,IntSet}
 `1:n` from a list of `n` sets (all of type `Set` or all of type
 `IntSet`).
 """
-function IntersectionGraph{T<:AnySet}(slist::Vector{T})
-    n = length(slist)
-    G = IntGraph(n)
+# function IntersectionGraph{T<:AnySet}(slist::Vector{T})
+#     n = length(slist)
+#     G = IntGraph(n)
+#
+#     for u=1:n-1
+#         A = slist[u]
+#         for v=u+1:n
+#             B = slist[v]
+#             if length(intersect(A,B))>0
+#                 add!(G,u,v)
+#             end
+#         end
+#     end
+#     return G
+# end
 
-    for u=1:n-1
-        A = slist[u]
-        for v=u+1:n
-            B = slist[v]
-            if length(intersect(A,B))>0
-                add!(G,u,v)
-            end
-        end
-    end
-    return G
+function IntersectionGraph{T<:AnySet}(slist::Vector{T})
+  n = length(slist)
+  f = Dict{Int,T}()
+  for k=1:n
+    f[k] = slist[k]
+  end
+  return IntersectionGraph(f)
 end
 
 
@@ -50,7 +59,6 @@ function IntersectionGraph{S,T<:AnySet}(f::Dict{S,T})
             end
         end
     end
-
+    cache_save(G,:IntersectionGraph,f)
     return G
 end
-    
