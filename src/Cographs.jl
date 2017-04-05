@@ -53,7 +53,7 @@ function RandomCograph{T}(vtcs::Vector{T})
       end
     end
   end
-
+  cache_save(G,:name,"Cograph")
   return G
 end
 

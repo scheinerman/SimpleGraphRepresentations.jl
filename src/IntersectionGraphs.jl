@@ -43,7 +43,7 @@ function IntersectionGraph{S,T<:AnySet}(f::Dict{S,T})
             end
         end
     end
-    cache_save(G,:IntersectionGraph,f)
+    cache_save(G,:IntersectionRepresentation,f)
     cache_save(G,:name,"Intersection graph")
     return G
 end

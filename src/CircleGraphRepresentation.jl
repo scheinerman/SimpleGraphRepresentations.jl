@@ -1,16 +1,16 @@
 using SimpleGF2, SimpleGraphs, SimplePosets, Memoize, SimpleGraphAlgorithms
 
-export CircleGraphRepresentation
+export CircleRepresentation
 
 # AUTHOR: Tara Abrishami
 
 """
-`CircleGraphRepresentation(G)` returns a circle graph representation of the
+`CircleRepresentation(G)` returns a circle graph representation of the
 graph `G` or throws an error if there is none.
 """
-function CircleGraphRepresentation(G::SimpleGraph)
-  if cache_check(G,:CircleGraphRepresentation)
-    return cache_recall(G,:CircleGraphRepresentation)
+function CircleRepresentation(G::SimpleGraph)
+  if cache_check(G,:CircleRepresentation)
+    return cache_recall(G,:CircleRepresentation)
   end
   V = vertex_type(G)
   numVert = Dict{Int, V}()
@@ -80,7 +80,7 @@ function CircleGraphRepresentation(G::SimpleGraph)
   for q in 1:length(ret)
     retn[q] = numVert[ret[q]]
   end
-  cache_save(G,:CircleGraphRepresentation,retn)
+  cache_save(G,:CircleRepresentation,retn)
   return retn
 end
 
