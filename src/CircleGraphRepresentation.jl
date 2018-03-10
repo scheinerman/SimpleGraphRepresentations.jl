@@ -73,7 +73,7 @@ function CircleRepresentation(G::SimpleGraph)
   comps = collect(parts(components(G)))
   for c in comps
     lis = assignOrder(c, G, vertNum, sol, numVert)
-    lis = mod(lis-1, verts) + 1
+    lis = mod.(lis-1, verts) + 1
     ret = vcat(ret, flipdim(flipdim(lis, 1), 1))
   end
   retn = Array{V}(length(ret))
@@ -325,7 +325,7 @@ end
         PP_exts = all_linear_extensions(PP)
         for L in PP_exts
             append!(L,[x])
-            L = mod(L-1, NV(G)) + 1
+            L = mod.(L-1, NV(G)) + 1
             GG = CircleGraph(L)
             X = relabel(G, vertNum)
             if GG == induce(X, Set(vlist(GG)))
