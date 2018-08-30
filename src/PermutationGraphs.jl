@@ -5,7 +5,7 @@ export PermutationRepresentation
 `perm_adj(a,b)` is used to test for adajency in permutation graphs.
 This function is not exported.
 """
-function perm_adj{S<:Real, T<:Real}(a::Tuple{S,T}, b::Tuple{S,T})
+function perm_adj(a::Tuple{S,T}, b::Tuple{S,T}) where {S<:Real, T<:Real}
     if a[1] < b[1]
         return a[2] > b[2]
     end
@@ -51,7 +51,7 @@ The values in `d` must be all `Tuple{S,T}` where `S` and `T` are
 subtypes of `Real`. For example, declare `d` like this:
 `d = Dict{String, Tuple{Int,Int}}()`.
 """
-function PermutationGraph{VV, S<:Real, T<:Real}(d::Dict{VV,Tuple{S,T}})
+function PermutationGraph(d::Dict{VV,Tuple{S,T}}) where {VV, S<:Real, T<:Real}
     vtcs = collect(keys(d))
     G = SimpleGraph{VV}()
     for v in vtcs
@@ -76,7 +76,7 @@ end
 `PermutationGraph(f::Dict,g::Dict)` constructs a permutation graph
 from a pair of mappings from a vertex set to real values.
 """
-function PermutationGraph{T,R<:Real,S<:Real}(f::Dict{T,R},g::Dict{T,S})
+function PermutationGraph(f::Dict{T,R},g::Dict{T,S}) where {T,R<:Real,S<:Real} 
     # mush the two dictionaries into one
     h = Dict{T,Tuple{R,S}}()
     for k in keys(f)

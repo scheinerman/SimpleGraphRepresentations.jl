@@ -8,7 +8,7 @@ items on the list to a pair of positive integers giving the two locations
 of that element in the list. It's a helper function used by
 `CircleGraph`.
 """
-function list2locs{T}(list::Array{T,1})
+function list2locs(list::Array{T,1}) where T
   # build a map giving the locations of each symbol on the list
   err_msg = "Invalid input list"
   # check that the list length is even
@@ -39,7 +39,7 @@ end
 graph from them. Every element on the list should appear exactly
 twice on the list, or else an error is thrown.
 """
-function CircleGraph{T}(list::Array{T,1})
+function CircleGraph(list::Array{T,1}) where T 
   positions = list2locs(list)
 
   elts = collect(keys(positions))

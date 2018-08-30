@@ -3,4 +3,9 @@ ClosedIntervals
 SimpleGraphs
 SimpleGraphAlgorithms
 SimpleGraphDrawings
-PyPlot 
+SimplePartitions
+SimpleGF2
+SimplePosets
+PyPlot
+Permutations
+Memoize

@@ -9,7 +9,7 @@ export UnitIntervalGraphEvolution
 `IntervalGraph(Jlist)` creates an interval graph from a list of closed
 intervals.
 """
-function IntervalGraph{T}(Jlist::Array{ClosedInterval{T},1})
+function IntervalGraph(Jlist::Array{ClosedInterval{T},1}) where T
   d = Dict{Int,ClosedInterval{T}}()
   n = length(Jlist)
   for k=1:n
@@ -24,7 +24,7 @@ end
 whose keys are the names of the vertices and whose values are
 intervals.
 """
-function IntervalGraph{K,T}(f::Dict{K,ClosedInterval{T}})
+function IntervalGraph(f::Dict{K,ClosedInterval{T}}) where {K,T}
     klist = collect(keys(f))
     G = SimpleGraph{K}()
     for v in klist
@@ -85,7 +85,7 @@ end
 `IntervalDigraph1(Jlist)` creates a type I interval digraph from a
 list of closed intervals.
 """
-function IntervalDigraph1{T}(Jlist::Array{ClosedInterval{T},1})
+function IntervalDigraph1(Jlist::Array{ClosedInterval{T},1}) where T
     n = length(Jlist)
     G = IntDigraph(n)
     for u=1:n
@@ -113,10 +113,10 @@ end
 `IntervalDigraph2(send_list, rec_list)` creates a Type II interval
 graph from two lists of intervals.
 """
-function IntervalDigraph2{T}(
+function IntervalDigraph2(
          send_list::Array{ClosedInterval{T},1},
          rec_list::Array{ClosedInterval{T},1}
-                            )
+                            ) where T
     n = length(send_list)
     if length(rec_list) != n
         error("send_list and rec_list must be same length")
@@ -143,8 +143,8 @@ end
 dictionary whose keys are the names of the vertices and whose values
 are intervals.
 """
-function IntervalDigraph1{K,T}(snd::Dict{K,ClosedInterval{T}} ,
-                              rec::Dict{K,ClosedInterval{T}})
+function IntervalDigraph1(snd::Dict{K,ClosedInterval{T}} ,
+                              rec::Dict{K,ClosedInterval{T}}) where {K,T}
     if length(snd) != length(rec)
         error("send and receive dictionaries must have same keys")
     end
@@ -186,8 +186,8 @@ end
 `IntervalDigraph2(send::Dict,rec::Dict)` creates a Type II interval
 digraph from two dictionaries mapping vertices to intervals.
 """
-function IntervalDigraph2{K,T}(snd::Dict{K,ClosedInterval{T}} ,
-                              rec::Dict{K,ClosedInterval{T}})
+function IntervalDigraph2(snd::Dict{K,ClosedInterval{T}} ,
+                              rec::Dict{K,ClosedInterval{T}}) where {K,T}
     if length(snd) != length(rec)
         error("send and receive dictionaries must have same keys")
     end
@@ -244,7 +244,6 @@ end
 `RandomIntervalDigraph2(n::Int)` generates a random type II
 directed interval graph with `n` vertices.
 """
-
 function RandomIntervalDigraph2(n::Int)
     snd_list = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
     rec_list  = [ ClosedInterval(rand(),rand()) for _ in 1:n ]
@@ -258,7 +257,7 @@ end
 vector `x` specifies the left end points of the intervals. The
 optional parameter `t` specifies the lengths of the intervals.
 """
-function UnitIntervalGraph{T<:Real}(points::Vector{T}, t::Real=1)
+function UnitIntervalGraph(points::Vector{T}, t::Real=1) where {T<:Real}
   n = length(points)
   f = Dict{Int,T}()
   for k=1:n
@@ -274,7 +273,7 @@ dictionary mapping vertex names to the left end points of their
 intervals. The optional parameter `t` specifies the length of the
 intervals.
 """
-function UnitIntervalGraph{S,T<:Real}(f::Dict{S,T}, t::Real=1)
+function UnitIntervalGraph(f::Dict{S,T}, t::Real=1) where {S,T<:Real}
     vtcs = collect(keys(f))
     n = length(vtcs)
     G = SimpleGraph{S}()
@@ -314,8 +313,7 @@ the lengths of the intervals (whose left end points are specified in
 This returns a pair consisting of the sequence of edges and the
 lengths at which those edges appear.
 """
-
-function UnitIntervalGraphEvolution{S<:Real}(points::Vector{S})
+function UnitIntervalGraphEvolution(points::Vector{S}) where S<:Real
     n = length(points)
     nC2 = round(Int,n*(n-1)/2)
 

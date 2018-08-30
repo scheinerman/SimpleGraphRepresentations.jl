@@ -7,7 +7,7 @@ export CircleRepresentationDrawing, RainbowDrawing
 implicit in `list`. Requires `PyPlot`. Not exporting this for that
 reason.
 """
-function CircleRepresentationDrawing{T}(list::Array{T,1},labels::Bool=true)
+function CircleRepresentationDrawing(list::Array{T,1},labels::Bool=true) where T
   positions = SimpleGraphRepresentations.list2locs(list)
   nn = length(list)
   verts = collect(keys(positions))
@@ -66,7 +66,7 @@ end
 `RainbowDrawing(lst)` creates a rainbow representation
 of a circle graph from a list of the positions.
 """
-function RainbowDrawing{T}(list::Array{T,1})
+function RainbowDrawing(list::Array{T,1}) where T 
   positions = SimpleGraphRepresentations.list2locs(list)
   nn = length(list)
   verts = collect(keys(positions))

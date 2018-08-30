@@ -8,8 +8,8 @@ export ToleranceGraph
 `ToleranceGraph(Jlist, tlist)` creates a tolerance graph where `Jlist`
 is a list of intervals and `tlist` is a list of tolerances.
 """
-function ToleranceGraph{S<:Real,T<:Real}(Jlist::Vector{ClosedInterval{S}},
-                                         tlist::Vector{T})
+function ToleranceGraph(Jlist::Vector{ClosedInterval{S}},
+                        tlist::Vector{T}) where {S<:Real,T<:Real}
     n = length(Jlist)
     G = IntGraph(n)
 
@@ -34,9 +34,7 @@ end
 mapping vertices to pairs `(J,t)` where `J` is a `ClosedInterval` and
 `t` is a `Real` tolerance.
 """
-function ToleranceGraph{S<:Real,T<:Real,X}(
-                        f::Dict{X,Tuple{ClosedInterval{S},T}}
-                                           )
+function ToleranceGraph(f::Dict{X,Tuple{ClosedInterval{S},T}}) where {S<:Real,T<:Real,X}
     vtcs = collect(keys(f))
     G = SimpleGraph{X}()
     for v in vtcs

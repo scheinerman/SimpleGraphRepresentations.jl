@@ -9,7 +9,7 @@ vector `w`.
 `ThresholdGraph(dw)` creates a threshold graph from a dictionary
 mapping vertices to weights.
 """
-function ThresholdGraph{T<:Real}(w::Array{T,1})
+function ThresholdGraph(w::Array{T,1}) where T<:Real
   n = length(w)
   f = Dict{Int,T}()
   for k=1:n
@@ -18,7 +18,7 @@ function ThresholdGraph{T<:Real}(w::Array{T,1})
   return ThresholdGraph(f)
 end
 
-function ThresholdGraph{S,T<:Real}(dw::Dict{S,T})
+function ThresholdGraph(dw::Dict{S,T}) where {S,T<:Real}
     G = SimpleGraph{S}()
     vtcs = collect(keys(dw))
     n = length(vtcs)

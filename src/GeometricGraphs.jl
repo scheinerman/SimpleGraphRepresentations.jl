@@ -11,7 +11,7 @@ representing the vertices `1:n`. Two vertices are adjacent iff the
 distance between the points is at most `1` (or an optional second
 parameter, `d`).
 """
-function GeometricGraph{T<:Real}(A::Array{T,2}, d::Real=1)
+function GeometricGraph(A::Array{T,2}, d::Real=1) where T<:Real
     r,n = size(A)
     G = IntGraph(n)
     dd::T = d*d
@@ -35,7 +35,7 @@ vectors creates a geometric graph in which two vertices are adjacent
 iff distance between their points is at most `1` (or `d` if given as a
 second argument).
 """
-function GeometricGraph{S,T<:Real}(f::Dict{S,Vector{T}}, d::Real=1)
+function GeometricGraph(f::Dict{S,Vector{T}}, d::Real=1) where {S,T<:Real}
     G = SimpleGraph{S}()
     vtcs = collect(keys(f))
     for v in vtcs
@@ -66,4 +66,3 @@ distance at most `d`.
 function RandomGeometricGraph(n::Int, dim::Int=2, d::Real=1)
     return GeometricGraph(rand(dim,n),d)
 end
-
