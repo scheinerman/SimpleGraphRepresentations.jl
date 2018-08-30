@@ -62,7 +62,7 @@ function CircleRepresentation(G::SimpleGraph)
     end
   end
   C = C'
-  sol = Array{GF2}()
+  sol = Array{GF2}(undef)
   try
     sol = solve_augmented(C)
   catch

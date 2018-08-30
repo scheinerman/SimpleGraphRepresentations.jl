@@ -4,8 +4,9 @@ using SimpleGraphs
 using Permutations
 using ClosedIntervals
 using SimplePartitions
+using Random
 
-import SimpleGraphs.cache_save 
+import SimpleGraphs.cache_save
 
 include("IntervalGraphs.jl")
 include("PermutationGraphs.jl")

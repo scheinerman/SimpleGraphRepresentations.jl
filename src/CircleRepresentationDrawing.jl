@@ -53,7 +53,7 @@ function semicircle(x1::Number, x2::Number)
   rad = abs(x1-x2)/2
 
   angles = collect(0:180)*(pi/180)
-  x = rad*[ cos(t) for t in angles ] + ctr
+  x = rad*[ cos(t) for t in angles ] .+ ctr
   y = rad*[ sin(t) for t in angles ]
   plot(x,y,"-",color="black")
   plot(x[1],y[1],"ok")
@@ -66,7 +66,7 @@ end
 `RainbowDrawing(lst)` creates a rainbow representation
 of a circle graph from a list of the positions.
 """
-function RainbowDrawing(list::Array{T,1}) where T 
+function RainbowDrawing(list::Array{T,1}) where T
   positions = SimpleGraphRepresentations.list2locs(list)
   nn = length(list)
   verts = collect(keys(positions))
