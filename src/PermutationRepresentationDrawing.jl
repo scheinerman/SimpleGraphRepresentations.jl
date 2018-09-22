@@ -1,14 +1,14 @@
-using PyPlot
+export PermutationRepresentationDrawing
+
 """
 `PermutationRepresentationDrawing(G)` draws a picture of a permtuation
 representation of the graph `G` (if one exists). An optional second
-argument (of type `Bool`) determines if labels are included.
-Requires `PyPlot`.
+argument (of type `Int`) determines the point size of the labels.
 """
 function PermutationRepresentationDrawing(G::SimpleGraphs.SimpleGraph,
-                                          labels::Bool=false)
+                                          font_size=8)
   f,g = PermutationRepresentation(G)
-  PermutationRepresentationDrawing(f,g,labels)
+  PermutationRepresentationDrawing(f,g,font_size)
 end
 
 """
@@ -16,24 +16,30 @@ end
 drawing from a pair of dictionaries mapping vertices to integers.
 This is used by `PermutationRepresentationDrawing(G)`.
 """
-function PermutationRepresentationDrawing{T}(f::Dict{T,Int},g::Dict{T,Int},
-                                             labels::Bool=false)
+function PermutationRepresentationDrawing(f::Dict{T,Int},g::Dict{T,Int},
+                                             font_size=8) where T
   vertices = collect(keys(f))
   n = length(vertices)
-  MARKER_SIZE=15
+  MARKER_SIZE=10
 
-  clf()
+  yy = sqrt(length(f))
+
+  plot()
   for v in vertices
     x = [f[v],g[v]]
-    y = [1,0]
-    plot(x,y,color="black", marker="o", markersize=MARKER_SIZE,
-    markerfacecolor="white")
-    if labels
-      text(f[v],1.1,string(v))
-      text(g[v],-0.2,string(v))
+    y = [yy,0]
+    plot!(x,y,color="black")
+  end
+  for v in vertices
+    plot!([f[v]],[yy],markerstrokecolor="black", markercolor="white", marker=MARKER_SIZE, markerstrokewidth=2)
+    plot!([g[v]],[0],markerstrokecolor="black", markercolor="white", marker=MARKER_SIZE, markerstrokewidth=2)
+  end
+
+  for v in vertices
+    if font_size>0
+      annotate!(f[v],yy,string(v),font_size)
+      annotate!(g[v],0,string(v),font_size)
     end
   end
-  axis("off")
-  axis([0.5,n+0.5,-1,2])
-  return nothing
+  finish()
 end

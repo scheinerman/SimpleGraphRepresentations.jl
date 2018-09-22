@@ -8,8 +8,10 @@ using Random
 
 import SimpleGraphs.cache_save
 
+include("drawing_master.jl")
 include("IntervalGraphs.jl")
 include("PermutationGraphs.jl")
+include("PermutationRepresentationDrawing.jl")
 include("ThresholdGraphs.jl")
 include("IntersectionGraphs.jl")
 include("GeometricGraphs.jl")

@@ -67,7 +67,7 @@ RandomCograph(A::Set)    = RandomCograph(collect(A))
 `is_cograph(G)` returns `true` is `G` is a cograph, i.e., a
 complement reducible graph.
 """
-function is_cograph(G::SimpleGraph{T}) where T 
+function is_cograph(G::SimpleGraph{T}) where T
   if NV(G) <= 3    # all graphs with 3 or fewer vertices are cographs
     return true
   end
@@ -124,7 +124,7 @@ function CographRepresentation(G::SimpleGraph)
         result *= CographRepresentation(H)
       end
       if k<ncomps
-        result *= "*"
+        result *= "∨"
       end
     end
   else
