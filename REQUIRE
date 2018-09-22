@@ -5,7 +5,8 @@ SimpleGraphAlgorithms
 SimplePartitions
 SimpleGF2
 SimplePosets
-PyPlot
+Plots
+GR
 Permutations
 Random
 Memoize

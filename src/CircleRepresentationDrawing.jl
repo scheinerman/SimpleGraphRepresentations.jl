@@ -1,22 +1,29 @@
-using PyPlot
+using Plots
 
 export CircleRepresentationDrawing, RainbowDrawing
 
+function finish()
+    plot!(legend=false, aspect_ratio=1, axis=false, grid=false)
+end
+
+gr()
+
+
 """
-`CircleRepresentationDrawing(list)` draws the circle representation
+`CircleRepresentationDrawing(list, fontsize=8)` draws the circle representation
 implicit in `list`. Requires `PyPlot`. Not exporting this for that
 reason.
 """
-function CircleRepresentationDrawing(list::Array{T,1},labels::Bool=true) where T
+function CircleRepresentationDrawing(list::Array{T,1},font_size=8) where T
+  font_size=8
   positions = SimpleGraphRepresentations.list2locs(list)
   nn = length(list)
   verts = collect(keys(positions))
-  clf()
   rad = 2
   theta = collect(0:360)*pi/180
   x = rad*map(cos,theta)
   y = rad*map(sin,theta)
-  plot(x,y,linestyle=":", color="black")
+  plot(x,y,linestyle=:dot, color="black")
 
   for v in verts
     p = positions[v]
@@ -24,19 +31,18 @@ function CircleRepresentationDrawing(list::Array{T,1},labels::Bool=true) where T
     b = (p[2]-1)*2*pi/nn
     x = rad*[cos(a), cos(b)]
     y = rad*[sin(a), sin(b)]
-    plot(x,y,color="black")
+    plot!(x,y,color="black")
 
-    if labels
+    if font_size > 0
       mu = 1.1
       for k=1:2
-        text(mu*x[k],mu*y[k],string(v))
+        # text(mu*x[k],mu*y[k],string(v))
+        annotate!(mu*x[k],mu*y[k],string(v),font_size)
       end
     end
 
   end
-  axis("equal")
-  axis("off")
-  nothing
+  finish()
 end
 
 """
@@ -48,42 +54,40 @@ function CircleRepresentationDrawing(str::String, labels::Bool=true)
   CircleRepresentationDrawing(list,labels)
 end
 
-function semicircle(x1::Number, x2::Number)
+function semicircle(x1::Number, x2::Number, diam=2)
   ctr = (x1+x2)/2
   rad = abs(x1-x2)/2
 
   angles = collect(0:180)*(pi/180)
   x = rad*[ cos(t) for t in angles ] .+ ctr
   y = rad*[ sin(t) for t in angles ]
-  plot(x,y,"-",color="black")
-  plot(x[1],y[1],"ok")
-  plot(x[end],y[end],"ok")
-  axis("equal")
-  nothing
+  plot!(x,y,color="black", linestyle=:dot)
+  plot!([x[1]],[y[1]],marker=diam, markercolor="black")
+  plot!([x[end]],[y[end]],marker=diam, markercolor="black")
 end
 
 """
-`RainbowDrawing(lst)` creates a rainbow representation
+`RainbowDrawing(lst,font_size=8)` creates a rainbow representation
 of a circle graph from a list of the positions.
 """
-function RainbowDrawing(list::Array{T,1}) where T
+function RainbowDrawing(list::Array{T,1}, font_size::Int = 8) where T
   positions = SimpleGraphRepresentations.list2locs(list)
   nn = length(list)
   verts = collect(keys(positions))
-  #clf()
+
+  x = [0,nn+1]
+  y = [0,0]
+  plot(x,y,color="black")
+
   gap = -0.5
   for v in verts
     p = positions[v]
     semicircle(p[1],p[2])
-    text(p[1],gap,string(v))
-    text(p[2],gap,string(v))
+    if font_size > 0
+        annotate!(p[1],gap,string(v),font_size)
+        annotate!(p[2],gap,string(v),font_size)
+    end
   end
 
-  x = [0,nn+1]
-  y = [0,0]
-  plot(x,y,"-",color="black")
-
-  axis("off")
-  axis("equal")
-  nothing
+  finish()
 end
