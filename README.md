@@ -10,7 +10,7 @@
 The `SimpleGraphRepresentations` module is an extension of
 `SimpleGraphs`. It provides methods for dealing with intersection
 graphs and the like.
-This module requires the `PyPlot`,
+This module requires the `Plots`, `GR`,
 `SimpleGraphs`, `ClosedIntervals`, and
 `Permutations` modules.
 
@@ -124,7 +124,7 @@ Sample output for one is shown here:
 
 ![](rep.png)
 
-This code required `PyPlot`.
+This code required `Plots`.
 
 
 ## Cographs
