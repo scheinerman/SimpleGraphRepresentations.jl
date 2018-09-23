@@ -1,5 +1,12 @@
 # Simple Graph Representations
 
+[![Build Status](https://travis-ci.org/scheinerman/SimpleGraphRepresentations.jl.svg?branch=master)](https://travis-ci.org/scheinerman/SimpleGraphs.jl)
+
+
+[![codecov.io](http://codecov.io/github/scheinerman/SimpleGraphRepresentations.jl/coverage.svg?branch=master)](http://codecov.io/github/scheinerman/SimpleGraphs.jl?branch=master)
+
+
+
 The `SimpleGraphRepresentations` module is an extension of
 `SimpleGraphs`. It provides methods for dealing with intersection
 graphs and the like.
