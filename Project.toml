@@ -1,0 +1,24 @@
+name = "SimpleGraphRepresentations"
+uuid = "4f049fe5-7dc2-5fe0-b347-242bcf8eeb44"
+
+[deps]
+ClosedIntervals = "059b0e18-018a-5deb-a5b2-c624ee85784b"
+GR = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
+Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
+Permutations = "2ae35dd2-176d-5d53-8349-f30d82d94d4f"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+SimpleGF2 = "26dc7fb7-0d88-57af-8ff4-0a7e14249ddd"
+SimpleGraphAlgorithms = "41400c72-0c58-5c16-8579-4ecbce768449"
+SimpleGraphs = "55797a34-41de-5266-9ec1-32ac4eb504d3"
+SimplePartitions = "ec83eff0-a5b5-5643-ae32-5cbf6eedec9d"
+SimplePosets = "b2aef97b-4721-5af9-b440-0bad754dc5ba"
+
+[compat]
+julia = "≥ 0.7.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
