@@ -37,8 +37,8 @@ function PermutationRepresentationDrawing(f::Dict{T,Int},g::Dict{T,Int},
 
   for v in vertices
     if font_size>0
-      annotate!(f[v],yy,string(v),font_size)
-      annotate!(g[v],0,string(v),font_size)
+      annotate!((f[v],yy,string(v),font_size))
+      annotate!((g[v],0,string(v),font_size))
     end
   end
   finish()

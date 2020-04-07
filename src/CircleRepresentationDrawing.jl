@@ -31,7 +31,7 @@ function CircleRepresentationDrawing(list::Array{T,1},font_size=8) where T
       mu = 1.1
       for k=1:2
         # text(mu*x[k],mu*y[k],string(v))
-        annotate!(mu*x[k],mu*y[k],string(v),font_size)
+        annotate!((mu*x[k],mu*y[k],string(v),font_size))
       end
     end
 
