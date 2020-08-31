@@ -9,13 +9,13 @@ vector `w`.
 `ThresholdGraph(dw)` creates a threshold graph from a dictionary
 mapping vertices to weights.
 """
-function ThresholdGraph(w::Array{T,1}) where T<:Real
-  n = length(w)
-  f = Dict{Int,T}()
-  for k=1:n
-    f[k] = w[k]
-  end
-  return ThresholdGraph(f)
+function ThresholdGraph(w::Array{T,1}) where {T<:Real}
+    n = length(w)
+    f = Dict{Int,T}()
+    for k = 1:n
+        f[k] = w[k]
+    end
+    return ThresholdGraph(f)
 end
 
 function ThresholdGraph(dw::Dict{S,T}) where {S,T<:Real}
@@ -24,22 +24,22 @@ function ThresholdGraph(dw::Dict{S,T}) where {S,T<:Real}
     n = length(vtcs)
 
     for v in vtcs
-        add!(G,v)
+        add!(G, v)
     end
 
-    for i=1:n-1
+    for i = 1:n-1
         u = vtcs[i]
         wt_u = dw[u]
-        for j=i+1:n
+        for j = i+1:n
             v = vtcs[j]
             wt_v = dw[v]
             if wt_u + wt_v >= 1
-                add!(G,u,v)
+                add!(G, u, v)
             end
         end
     end
-    cache_save(G,:ThresholdRepresentation,dw)
-    cache_save(G,:name,"Threshold graph")
+    cache_save(G, :ThresholdRepresentation, dw)
+    cache_save(G, :name, "Threshold graph")
     return G
 end
 
@@ -67,24 +67,24 @@ function CreationSequence(G1::SimpleGraph)
     T = eltype(G1)
     V = T[]
     G = deepcopy(G1)
-    while length(vlist(G)) !=0
-        r = false;
+    while length(vlist(G)) != 0
+        r = false
         for v in vlist(G)
             if deg(G, v) == 0
                 delete!(G, v)
                 r = true
-                unshift!(A,0)
-                unshift!(V,v)
+                unshift!(A, 0)
+                unshift!(V, v)
                 break
             end
-      if deg(G, v) == NV(G) -1
-          delete!(G, v)
-          r = true
-          unshift!(A, 1)
-          unshift!(V,v)
-          break
-      end
-    end
+            if deg(G, v) == NV(G) - 1
+                delete!(G, v)
+                r = true
+                unshift!(A, 1)
+                unshift!(V, v)
+                break
+            end
+        end
         if !r
             error("This graph is not a threshold graph")
         end
@@ -98,29 +98,29 @@ end
 weights. An error is raised if `G` is not a threshold graph.
 """
 function ThresholdRepresentation(G::SimpleGraph)
-    if cache_check(G,:ThresholdRepresentation)
-      return cache_recall(G,:ThresholdRepresentation)
+    if cache_check(G, :ThresholdRepresentation)
+        return cache_recall(G, :ThresholdRepresentation)
     end
-    A,V = CreationSequence(G)
+    A, V = CreationSequence(G)
 
     prev::Int = 0
-    prevVal::Rational = 1//3
+    prevVal::Rational = 1 // 3
     T = eltype(G)
-    D = Dict{T, Rational}()
+    D = Dict{T,Rational}()
     D[V[1]] = prevVal
     small::Rational = prevVal
     large::Rational = prevVal
-    for i in 2:length(A)
+    for i = 2:length(A)
         if A[i] == prev
             D[V[i]] = prevVal
         elseif A[i] == 0
-            D[V[i]] = (1-large)/2
-            prevVal = (1-large)/2
-            if (1-large)/2 < small
-                small = (1-large)/2
+            D[V[i]] = (1 - large) / 2
+            prevVal = (1 - large) / 2
+            if (1 - large) / 2 < small
+                small = (1 - large) / 2
             end
-            if (1-large)/2 > large
-                large = (1-large)/2
+            if (1 - large) / 2 > large
+                large = (1 - large) / 2
             end
         elseif A[i] == 1
             D[V[i]] = 1 - small
@@ -134,6 +134,6 @@ function ThresholdRepresentation(G::SimpleGraph)
         end
         prev = i
     end
-    cache_save(G,:ThresholdRepresentation,D)
+    cache_save(G, :ThresholdRepresentation, D)
     return D
 end

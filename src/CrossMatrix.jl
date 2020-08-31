@@ -22,19 +22,19 @@ function CrossMatrix{T}(list::Array{T,1})
         sort!(elts)
     end
 
-    A = zeros(Int,n,n)
+    A = zeros(Int, n, n)
 
-    for i=1:n
+    for i = 1:n
         v = elts[i]
         a = positions[v]
-        for j=1:n
+        for j = 1:n
             w = elts[j]
             b = positions[w]
-            if a[1]<b[1]<a[2]<b[2]
-                A[i,j] = 1
+            if a[1] < b[1] < a[2] < b[2]
+                A[i, j] = 1
             end
-            if b[1]<a[1]<b[2]<a[2]
-                A[i,j] = -1
+            if b[1] < a[1] < b[2] < a[2]
+                A[i, j] = -1
             end
         end
     end
@@ -42,140 +42,140 @@ function CrossMatrix{T}(list::Array{T,1})
 end
 
 function find_firsts_seconds{T}(list::Array{T,1})
-  F = Set{T}()  # firsts
-  n = length(list)
-  res = zeros(Int,n)
-  for i=1:n
-    x = list[i]
-    if in(x,F)
-      res[i]=2
-    else
-      push!(F,x)
-      res[i]=1
+    F = Set{T}()  # firsts
+    n = length(list)
+    res = zeros(Int, n)
+    for i = 1:n
+        x = list[i]
+        if in(x, F)
+            res[i] = 2
+        else
+            push!(F, x)
+            res[i] = 1
+        end
     end
-  end
-  return res
+    return res
 end
 
 
 function find_jumps{T}(list::Array{T,1})
-  n = length(list)
-  fs = find_firsts_seconds(list)
+    n = length(list)
+    fs = find_firsts_seconds(list)
 
-  jumps = Int[]
+    jumps = Int[]
 
-  for i=1:n-1
-    if fs[i] != fs[i+1] && list[i] != list[i+1]
-      push!(jumps,i)
+    for i = 1:n-1
+        if fs[i] != fs[i+1] && list[i] != list[i+1]
+            push!(jumps, i)
+        end
     end
-  end
-  return jumps
+    return jumps
 end
 
 # There's a spot at i,i+1 for a jump. Move the i to the right.
 function jump_over_right{T}(list::Array{T,1}, i::Int)
-  n = length(list)
-  fs = find_firsts_seconds(list)
-  if fs[i] == fs[i+1]
-    error("Not a valid jump location")
-  end
+    n = length(list)
+    fs = find_firsts_seconds(list)
+    if fs[i] == fs[i+1]
+        error("Not a valid jump location")
+    end
 
-  if fs[i] == 1
-    #println("intersecting")
-    a = list[i+1]
-    b = list[i]
-    b_locs = find(list .== b)
-    j = b_locs[2]
-    idx = [ collect(1:i); collect(i+2:j-1); i+1; collect(j:n) ]
-  else
-    #println("disjoint")
-    a = list[i]
-    b = list[i+1]
-    b_locs = find(list .== b)
-    j = b_locs[2]
-    idx = [ collect(1:i-1); collect(i+1:j); i; collect(j+1:n)]
-  end
-  #println(idx)
-  return list[idx]
+    if fs[i] == 1
+        #println("intersecting")
+        a = list[i+1]
+        b = list[i]
+        b_locs = find(list .== b)
+        j = b_locs[2]
+        idx = [collect(1:i); collect(i+2:j-1); i + 1; collect(j:n)]
+    else
+        #println("disjoint")
+        a = list[i]
+        b = list[i+1]
+        b_locs = find(list .== b)
+        j = b_locs[2]
+        idx = [collect(1:i-1); collect(i+1:j); i; collect(j+1:n)]
+    end
+    #println(idx)
+    return list[idx]
 end
 
 function jump_over_left{T}(list::Array{T,1}, i::Int)
-  rev_list = reverse(list)
-  n = length(list)
-  rev_ans  = jump_over_right(rev_list, i)
-  return reverse(rev_ans)
+    rev_list = reverse(list)
+    n = length(list)
+    rev_ans = jump_over_right(rev_list, i)
+    return reverse(rev_ans)
 end
 
 function rotate{T}(list::Array{T,1})
-  n = length(list)
-  result = Array{T,1}(n)
-  for i=2:n
-    result[i] = list[i-1]
-  end
-  result[1] = list[n]
-  return result
+    n = length(list)
+    result = Array{T,1}(n)
+    for i = 2:n
+        result[i] = list[i-1]
+    end
+    result[1] = list[n]
+    return result
 end
 
-function build_jump_graph{T}(list::Array{T,1}, early_quit::Bool=true)
-  todo = []
-  done = Set()
-  push!(todo,list)
-  G = SimpleGraph{Array{T,1}}()
-  add!(G,list)
+function build_jump_graph{T}(list::Array{T,1}, early_quit::Bool = true)
+    todo = []
+    done = Set()
+    push!(todo, list)
+    G = SimpleGraph{Array{T,1}}()
+    add!(G, list)
 
-  while length(todo)>0
-    current = pop!(todo)
-    if early_quit && maximum(deg(CircleGraph(current))) <= 1
-      return G
-    end
+    while length(todo) > 0
+        current = pop!(todo)
+        if early_quit && maximum(deg(CircleGraph(current))) <= 1
+            return G
+        end
 
-    if in(current,done)
-      continue
-    end
-    jump_list = find_jumps(current)
-    for i in jump_list
-      next = jump_over_right(current,i)
-      add!(G,current,next)
-      push!(todo,next)
-    end
-    jump_list = find_jumps(reverse(current))
-    for i in jump_list
-      next = jump_over_left(current,i)
-      add!(G,current,next)
-      push!(todo,next)
-    end
-    next = rotate(current)
-    add!(G,current,next)
-    push!(todo,next)
+        if in(current, done)
+            continue
+        end
+        jump_list = find_jumps(current)
+        for i in jump_list
+            next = jump_over_right(current, i)
+            add!(G, current, next)
+            push!(todo, next)
+        end
+        jump_list = find_jumps(reverse(current))
+        for i in jump_list
+            next = jump_over_left(current, i)
+            add!(G, current, next)
+            push!(todo, next)
+        end
+        next = rotate(current)
+        add!(G, current, next)
+        push!(todo, next)
 
 
-    push!(done,current)
-  end
-  return G
+        push!(done, current)
+    end
+    return G
 end
 
 
 function path2caravan{T}(list::Array{T,1})
-  G = build_jump_graph(list)
-  for v in G.V
-    H = CircleGraph(v)
-    if maximum(deg(H)) <= 1
-      p = find_path(G,list,v)
-      return p
+    G = build_jump_graph(list)
+    for v in G.V
+        H = CircleGraph(v)
+        if maximum(deg(H)) <= 1
+            p = find_path(G, list, v)
+            return p
+        end
     end
-  end
-  error("Cannot reduce to a caravan")
+    error("Cannot reduce to a caravan")
 end
 
 function trim_caravan_path{T}(P::Array{Array{T,1},1})
-  n = length(P)
-  for k=1:n
-    G = CircleGraph(P[k])
-    if maximum(deg(G))<=1
-      return P[1:k]
+    n = length(P)
+    for k = 1:n
+        G = CircleGraph(P[k])
+        if maximum(deg(G)) <= 1
+            return P[1:k]
+        end
     end
-  end
-  return P
+    return P
 end
 
 """
@@ -183,67 +183,68 @@ end
 and report the average determinant of their cross
 matrix.
 """
-function average_det(n::Int, reps::Int=1000)
-  total = 0.0
-  P = Progress(reps,1)
-  for k=1:reps
-    A = CrossMatrix(RandomCircleRepresentation(n))
-    total += round(det(A))
-    next!(P)
-  end
-  return total/reps
+function average_det(n::Int, reps::Int = 1000)
+    total = 0.0
+    P = Progress(reps, 1)
+    for k = 1:reps
+        A = CrossMatrix(RandomCircleRepresentation(n))
+        total += round(det(A))
+        next!(P)
+    end
+    return total / reps
 end
 
 
 
 function caravan_demo_latex{T}(list::Array{T,1})
-  P = path2caravan(list)
-  P = trim_caravan_path(P)
-  np = length(P)
-  println("Reduce to caravan in $np steps")
-  run(`make very-clean`)
-  F = open("caravan.tex","w")
+    P = path2caravan(list)
+    P = trim_caravan_path(P)
+    np = length(P)
+    println("Reduce to caravan in $np steps")
+    run(`make very-clean`)
+    F = open("caravan.tex", "w")
 
-  println(F,"\\documentclass[12pt]{article}")
-  println(F,"\\usepackage{graphicx}")
-  println(F,"\\usepackage{txfonts}")
-  println(F,"\\usepackage[margin=1in]{geometry}")
-  println(F,"\\begin{document}")
+    println(F, "\\documentclass[12pt]{article}")
+    println(F, "\\usepackage{graphicx}")
+    println(F, "\\usepackage{txfonts}")
+    println(F, "\\usepackage[margin=1in]{geometry}")
+    println(F, "\\begin{document}")
 
-  for i=1:np
-    a = P[i]
-    G = CircleGraph(a)
-    X = SimpleGraphDrawing(G)
-    spectral!(X)
-    spring!(X)
-    stress!(X)
-    figure(1)
-    clf()
-    set_vertex_size(20)
-    draw(X); draw_labels(X)
-    savefig("graph-$i.pdf")
-    clf()
-    RainbowDrawing(a)
-    savefig("rainbow-$i.pdf")
-    A = CrossMatrix(a)
+    for i = 1:np
+        a = P[i]
+        G = CircleGraph(a)
+        X = SimpleGraphDrawing(G)
+        spectral!(X)
+        spring!(X)
+        stress!(X)
+        figure(1)
+        clf()
+        set_vertex_size(20)
+        draw(X)
+        draw_labels(X)
+        savefig("graph-$i.pdf")
+        clf()
+        RainbowDrawing(a)
+        savefig("rainbow-$i.pdf")
+        A = CrossMatrix(a)
 
-    println(F,"\\begin{center}")
-    println(F,"\\includegraphics[width=0.5\\textwidth]{graph-$i-crop}\\\\")
-    println(F,"\\bigbreak\\hrule\\bigbreak")
-    println(F,"\\includegraphics[width=0.75\\textwidth]{rainbow-$i-crop}\\\\")
-    println(F,"\\[")
-    lap(F,A)
-    println(F,"\\]")
-    println(F,"\\end{center}")
-    if i < np
-      println(F,"\\newpage")
+        println(F, "\\begin{center}")
+        println(F, "\\includegraphics[width=0.5\\textwidth]{graph-$i-crop}\\\\")
+        println(F, "\\bigbreak\\hrule\\bigbreak")
+        println(F, "\\includegraphics[width=0.75\\textwidth]{rainbow-$i-crop}\\\\")
+        println(F, "\\[")
+        lap(F, A)
+        println(F, "\\]")
+        println(F, "\\end{center}")
+        if i < np
+            println(F, "\\newpage")
+        end
+
     end
-
-  end
-  println(F,"\\end{document}")
-  close(F)
-  close()
-  run(`make view`)
+    println(F, "\\end{document}")
+    close(F)
+    close()
+    run(`make view`)
 end
 
 
@@ -252,90 +253,93 @@ end
 Find an example of a connected circle graph with a given
 cross matrix nullity.
 """
-function find_example(n::Int, ngoal::Int=0)
-  while true
-    seq = RandomCircleRepresentation(n)
-    G = CircleGraph(seq)
-    if !is_connected(G)
-      continue
+function find_example(n::Int, ngoal::Int = 0)
+    while true
+        seq = RandomCircleRepresentation(n)
+        G = CircleGraph(seq)
+        if !is_connected(G)
+            continue
+        end
+        A = CrossMatrix(seq)
+        r = rank(A)
+        if r == n - ngoal
+            return G, seq, A
+        end
     end
-    A = CrossMatrix(seq)
-    r = rank(A)
-    if r == n-ngoal
-      return G,seq,A
-    end
-  end
 end
 
 """
 `find_example_tex(n,ngoal)`
 """
-function find_example_tex(n::Int, ngoal::Int=0)
-  G,seq,A = find_example(n,ngoal)
-  X = SimpleGraphDrawing(G)
-  spectral!(X)
-  spring!(X)
-  stress!(X)
-  figure(1)
-  set_vertex_size(20)
-  clf(); draw(X); draw_labels(X)
-  savefig("graph.pdf")
-  run(`pdfcrop graph.pdf`)
-  figure(2)
-  clf(); CircleRepresentationDrawing(seq)
-  savefig("rep.pdf")
-  run(`pdfcrop rep.pdf`)
+function find_example_tex(n::Int, ngoal::Int = 0)
+    G, seq, A = find_example(n, ngoal)
+    X = SimpleGraphDrawing(G)
+    spectral!(X)
+    spring!(X)
+    stress!(X)
+    figure(1)
+    set_vertex_size(20)
+    clf()
+    draw(X)
+    draw_labels(X)
+    savefig("graph.pdf")
+    run(`pdfcrop graph.pdf`)
+    figure(2)
+    clf()
+    CircleRepresentationDrawing(seq)
+    savefig("rep.pdf")
+    run(`pdfcrop rep.pdf`)
 
 
 
-  lap(A)
+    lap(A)
 
-  F = open("example.tex","w")
+    F = open("example.tex", "w")
 
-  println(F,"\\documentclass[12pt]{article}")
-  println(F,"\\usepackage{graphicx}")
-  println(F,"\\usepackage{txfonts}")
-  println(F,"\\usepackage[margin=0.75in]{geometry}")
-  println(F,"\\begin{document}")
-  println(F,"\\begin{center}")
-  println(F,"$n vertices with nullity $ngoal \\\\")
-  println(F,"\\includegraphics[width=0.45\\textwidth]{graph-crop}  ")
-  println(F,"\\includegraphics[width=0.45\\textwidth]{rep-crop} \\\\")
-  println(F,"\\[")
-  println(F,latex_form(A))
-  println(F,"\\]")
-  println(F,"\\end{center}")
-  println(F,"\\end{document}")
+    println(F, "\\documentclass[12pt]{article}")
+    println(F, "\\usepackage{graphicx}")
+    println(F, "\\usepackage{txfonts}")
+    println(F, "\\usepackage[margin=0.75in]{geometry}")
+    println(F, "\\begin{document}")
+    println(F, "\\begin{center}")
+    println(F, "$n vertices with nullity $ngoal \\\\")
+    println(F, "\\includegraphics[width=0.45\\textwidth]{graph-crop}  ")
+    println(F, "\\includegraphics[width=0.45\\textwidth]{rep-crop} \\\\")
+    println(F, "\\[")
+    println(F, latex_form(A))
+    println(F, "\\]")
+    println(F, "\\end{center}")
+    println(F, "\\end{document}")
 
-  close(F)
-  run(`pdflatex example`)
-  run(`launch example.pdf`)
+    close(F)
+    run(`pdflatex example`)
+    run(`launch example.pdf`)
 
 
-  return G,seq,A
+    return G, seq, A
 end
 
 
 function rank_indicator_vec{T}(list::Array{T,1})
-  n = round(Int,length(list)/2)
-  result = zeros(Int,n)
-  A = CrossMatrix(list)
-  r = round(Int,rank(A))
-  if n>0
-    result[r] = 1
-  else
-    warn("Rank zero skipped")
-  end
-  return result
+    n = round(Int, length(list) / 2)
+    result = zeros(Int, n)
+    A = CrossMatrix(list)
+    r = round(Int, rank(A))
+    if n > 0
+        result[r] = 1
+    else
+        warn("Rank zero skipped")
+    end
+    return result
 end
 
 
 function rand_hist(n::Int, reps::Int = 1000)
-  result = zeros(Int,n)
-  P = Progress(reps,1)
-  for j=1:reps
-    result += rank_indicator_vec(RandomCircleRepresentation(n))
-    next!(P)
-  end
-  return result /= reps
+    result = zeros(Int, n)
+    P = Progress(reps, 1)
+    for j = 1:reps
+        result += rank_indicator_vec(RandomCircleRepresentation(n))
+        next!(P)
+    end
+    return result /= reps
 end
