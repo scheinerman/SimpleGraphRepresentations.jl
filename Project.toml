@@ -15,7 +15,7 @@ SimplePartitions = "ec83eff0-a5b5-5643-ae32-5cbf6eedec9d"
 SimplePosets = "b2aef97b-4721-5af9-b440-0bad754dc5ba"
 
 [compat]
-julia = "≥ 0.7.0"
+julia = "1.5"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

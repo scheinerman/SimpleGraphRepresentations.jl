@@ -64,7 +64,7 @@ graph, then an error is raised.
 """
 function CreationSequence(G1::SimpleGraph)
     A = Int[]
-    T = vertex_type(G1)
+    T = eltype(G1)
     V = T[]
     G = deepcopy(G1)
     while length(vlist(G)) !=0
@@ -105,7 +105,7 @@ function ThresholdRepresentation(G::SimpleGraph)
 
     prev::Int = 0
     prevVal::Rational = 1//3
-    T = vertex_type(G)
+    T = eltype(G)
     D = Dict{T, Rational}()
     D[V[1]] = prevVal
     small::Rational = prevVal

@@ -12,7 +12,7 @@ function CircleRepresentation(G::SimpleGraph)
   if cache_check(G,:CircleRepresentation)
     return cache_recall(G,:CircleRepresentation)
   end
-  V = vertex_type(G)
+  V = eltype(G)
   numVert = Dict{Int, V}()
   vertNum = Dict{V, Int}()
   counter = 1
@@ -86,7 +86,7 @@ end
 
 function assignOrder(c, G, vertNum, sol, numVert)
   order = SimplePoset(Int)
-  V = vertex_type(G)
+  V = eltype(G)
   verts = NV(G)
   siz = length(c)
   arr = Array{V}(siz)

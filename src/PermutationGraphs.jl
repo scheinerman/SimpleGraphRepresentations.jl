@@ -122,7 +122,7 @@ function PermutationRepresentation(G::SimpleGraph)
     for e in elist(G2)
         add!(G1, e[1], e[2])
     end
-    T = vertex_type(G)
+    T = eltype(G)
     sigma = Dict{T, Int}()
     tau = Dict{T, Int}()
     vs1 = sort(vlist(G1), by = v-> out_deg(G1, v), rev=true)

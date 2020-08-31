@@ -109,7 +109,7 @@ using SimpleGF2
 and `false` otherwise.
 """
 function isCircleGraph(G::SimpleGraphs.SimpleGraph)
-  V = vertex_type(G)
+  V = eltype(G)
   vertNum = Dict{V, Int}()
   counter = 1
   verts = length(vlist(G))
