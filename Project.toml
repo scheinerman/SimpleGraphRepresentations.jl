@@ -16,6 +16,7 @@ SimplePosets = "b2aef97b-4721-5af9-b440-0bad754dc5ba"
 
 [compat]
 julia = "1.5"
+SimpleGraphs = "0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
