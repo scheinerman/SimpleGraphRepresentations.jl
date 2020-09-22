@@ -1,4 +1,4 @@
-# Simple Graph Representations
+# SimpleGraphRepresentations
 
 [![Build Status](https://travis-ci.org/scheinerman/SimpleGraphRepresentations.jl.svg?branch=master)](https://travis-ci.org/scheinerman/SimpleGraphs.jl)
 
