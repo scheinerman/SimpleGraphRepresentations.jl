@@ -17,6 +17,8 @@ SimplePosets = "b2aef97b-4721-5af9-b440-0bad754dc5ba"
 [compat]
 julia = "1"
 SimpleGraphs = "0.6, 0.7"
+ClosedIntervals = "0.62"
+
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
