@@ -1,9 +1,10 @@
 name = "SimpleGraphRepresentations"
 uuid = "4f049fe5-7dc2-5fe0-b347-242bcf8eeb44"
+version = "0.0.1"
 
 [deps]
 ClosedIntervals = "059b0e18-018a-5deb-a5b2-c624ee85784b"
-GR = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
+# GR = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
 Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
 Permutations = "2ae35dd2-176d-5d53-8349-f30d82d94d4f"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
@@ -16,8 +17,16 @@ SimplePosets = "b2aef97b-4721-5af9-b440-0bad754dc5ba"
 
 [compat]
 julia = "1"
+# GR = "0.62"
 SimpleGraphs = "0.6, 0.7"
-ClosedIntervals = "0.62"
+ClosedIntervals = "0.3.0"
+Memoize = "0.4"
+Permutations = "0.4"
+Plots = "1"
+SimpleGF2 = "0.1"
+SimpleGraphAlgorithms = "0.4"
+SimplePartitions = "0.3"
+SimplePosets = "0.1"
 
 
 [extras]
