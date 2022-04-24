@@ -134,6 +134,78 @@ function IntersectionRepresentation(G::SimpleGraph, k::Int)
         end
     end
 
-    return d
+    # sets = values(d)
+    # A = union(sets...)
+    # i = length(A)
 
+    # @info "Estimated intersection number: $i (upper bound)"
+
+    return d
 end
+
+
+"""
+    IntersectionNumber(G)
+
+Compute the intersection number of `G`. 
+
+*Warning*: This can be slow. Use `IntersectionNumber(G,false)` to supress output.
+"""
+function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
+
+    if verbose
+        @info "Test if the graph is triangle free"
+    end
+
+    ω = length(max_clique(G))
+    if verbose
+        @info "ω = $ω"
+    end
+    if ω < 3
+        return NE(G)
+    end
+
+
+    if verbose
+        @info "Finding an upper bound"
+    end
+
+    k = min(NE(G), NV(G))
+
+    go = true
+    while go
+        if verbose
+            @info "Testing if i(G) ≤ $k"
+        end
+        try
+            d = IntersectionRepresentation(G, k)
+
+            sets = values(d)
+            A = union(sets...)
+            k = length(A)
+
+            go = false
+        catch
+            verbose && @info "i(G) > $k"
+            k *= 2
+            k = min(k, NE(G))
+        end
+    end
+
+    verbose && @info "Confirmed i(G) ≤ $k"
+
+    go = true
+    while go
+        verbose && @info "Test if i(G) < $k"
+        try
+            d = IntersectionRepresentation(G, k - 1)
+            k -= 1
+        catch
+            go = false
+        end
+    end
+
+    return k
+end
+
+export IntersectionNumber

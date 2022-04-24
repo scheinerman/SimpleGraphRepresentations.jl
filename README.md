@@ -173,6 +173,8 @@ of `G` as a cograph.
 
 + `IntersectionRepresentation(G,k)` creates an intersection representation  of `G` using subsets of `{1,2,...,k}`. Returns a dictionary mapping vertices of `G` to sets.
 
++ `IntersectionNumber(G)` returns the intersection number of `G`. **Warning**: This can be very slow. Use `IntersectionNumber(G,false)` to supress some diagnostic output. 
+
 ## Geometric graphs
 
 A *geometric graph* is a graph whose vertices are represented by
