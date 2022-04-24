@@ -5,13 +5,14 @@ using Permutations
 using ClosedIntervals
 using SimplePartitions
 using Random
+using SimpleDrawing, Plots, LinearAlgebra
 
 
 using JuMP, ChooseOptimizer
 
 import SimpleGraphs.cache_save
 
-include("drawing_master.jl")
+# include("drawing_master.jl")
 include("IntervalGraphs.jl")
 include("PermutationGraphs.jl")
 include("PermutationRepresentationDrawing.jl")

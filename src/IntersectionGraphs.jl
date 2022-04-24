@@ -153,17 +153,24 @@ Compute the intersection number of `G`.
 """
 function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
 
+    if cache_check(G, :IntersectionNumber)
+        return cache_recall(G, :IntersectionNumber)
+    end
+
     if verbose
         @info "Test if the graph is triangle free"
     end
 
-    ω = length(max_clique(G))
-    if verbose
-        @info "ω = $ω"
-    end
-    if ω < 3
+    A = adjacency(G)
+    t_count = tr(A^3)
+
+    if t_count == 0
+        @info "No triangles"
+        cache_save(G, :IntersectionNumber, NE(G))
         return NE(G)
     end
+
+    @info "This graph has triangles"
 
 
     if verbose
@@ -205,6 +212,7 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
         end
     end
 
+    cache_save(G, :IntersectionNumber, k)
     return k
 end
 
