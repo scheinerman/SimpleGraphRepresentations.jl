@@ -170,7 +170,7 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
         return NE(G)
     end
 
-    @info "This graph has triangles"
+    verbose && @info "This graph has triangles"
 
 
     if verbose
