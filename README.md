@@ -1,9 +1,6 @@
 # SimpleGraphRepresentations
 
-[![Build Status](https://travis-ci.org/scheinerman/SimpleGraphRepresentations.jl.svg?branch=master)](https://travis-ci.org/scheinerman/SimpleGraphs.jl)
 
-
-[![codecov.io](http://codecov.io/github/scheinerman/SimpleGraphRepresentations.jl/coverage.svg?branch=master)](http://codecov.io/github/scheinerman/SimpleGraphs.jl?branch=master)
 
 
 
@@ -173,6 +170,8 @@ of `G` as a cograph.
 
 + `IntersectionGraph(f)` creates an intersection graph from a
   dictionary mapping vertex names to sets.
+
++ `IntersectionRepresentation(G,k)` creates an intersection representation  of `G` using subsets of `{1,2,...,k}`. Returns a dictionary mapping vertices of `G` to sets.
 
 ## Geometric graphs
 

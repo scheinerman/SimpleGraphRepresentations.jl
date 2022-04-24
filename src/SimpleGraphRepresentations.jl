@@ -6,6 +6,9 @@ using ClosedIntervals
 using SimplePartitions
 using Random
 
+
+using JuMP, ChooseOptimizer
+
 import SimpleGraphs.cache_save
 
 include("drawing_master.jl")
