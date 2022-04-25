@@ -48,6 +48,10 @@ function IntersectionGraph(f::Dict{S,T}) where {S,T<:AnySet}
 end
 
 
+function _is_triangle_free(G::SimpleGraph)::Bool
+    A = adjacency(G)
+    return tr(A^3) == 0
+end
 
 export IntersectionRepresentation
 """
@@ -57,21 +61,64 @@ Create an intersection representation of `G` using subsets of
 `{1,2,...,k}` or throw an error if not such representation 
 exists.
 """
-function IntersectionRepresentation(G::SimpleGraph, k::Int)
+function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
     if k < 0
         @error "Set size must be nonnegative"
     end
 
+    if cache_check(G, :IntersectionRepresentation)
+        return cache_recall(G, :IntersectionRepresentation)
+    end
+
+    if cache_check(G, :IntersectionNumber)
+        i = cache_recall(G, :IntersectionNumber)
+        if i > k
+            error("This graph has intersection number $i so no representation is possible with only $k elements")
+        end
+    end
+
     VV = vlist(G)
+    d = Dict{T,Set{Int}}()
 
     # special case for edgeless graphs 
     if NE(G) == 0
-        d = Dict{eltype(G),Set{Int}}()
         for v in G.V
             d[v] = Set{Int}()
         end
+        cache_save(G, :IntersectionRepresentation, d)
         return d
     end
+
+
+    # special case for triangle-free graphs
+
+    if _is_triangle_free(G)
+        lookup = Dict{Tuple{T,T},Int}()
+        EE = elist(G)
+        m = length(EE)
+
+        for j = 1:m
+            e = EE[j]
+            v, w = e
+            lookup[(v, w)] = j
+            lookup[(w, v)] = j
+        end
+
+
+        for v ∈ VV
+            Nv = G[v]
+            vals = (lookup[(v, w)] for w ∈ Nv)
+            d[v] = Set{Int}(vals)
+        end
+
+        cache_save(G, :IntersectionRepresentation, d)
+
+
+        return d
+
+    end
+
+
 
     MOD = Model(get_solver())
 
@@ -123,7 +170,7 @@ function IntersectionRepresentation(G::SimpleGraph, k::Int)
     Y = value.(y)
 
 
-    d = Dict{eltype(G),Set{Int}}()
+    d = Dict{T,Set{Int}}()
     for v in VV
         S = Set{Int}()
         for i = 1:k
@@ -133,12 +180,6 @@ function IntersectionRepresentation(G::SimpleGraph, k::Int)
             d[v] = S
         end
     end
-
-    # sets = values(d)
-    # A = union(sets...)
-    # i = length(A)
-
-    # @info "Estimated intersection number: $i (upper bound)"
 
     return d
 end
@@ -151,7 +192,7 @@ Compute the intersection number of `G`.
 
 *Warning*: This can be slow. Use `IntersectionNumber(G,false)` to supress output.
 """
-function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
+function IntersectionNumber(G::SimpleGraph, verbose::Bool=true)::Int
 
     if cache_check(G, :IntersectionNumber)
         return cache_recall(G, :IntersectionNumber)
@@ -161,10 +202,7 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
         @info "Test if the graph is triangle free"
     end
 
-    A = adjacency(G)
-    t_count = tr(A^3)
-
-    if t_count == 0
+    if _is_triangle_free(G)
         @info "No triangles"
         cache_save(G, :IntersectionNumber, NE(G))
         return NE(G)
@@ -186,6 +224,7 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
         end
         try
             d = IntersectionRepresentation(G, k)
+            cache_save(G, :IntersectionRepresentation, d)
 
             sets = values(d)
             A = union(sets...)
@@ -206,6 +245,7 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
         verbose && @info "Test if i(G) < $k"
         try
             d = IntersectionRepresentation(G, k - 1)
+            cache_save(G, :IntersectionRepresentation, d)
             k -= 1
         catch
             go = false
