@@ -63,19 +63,31 @@ exists.
 """
 function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
     if k < 0
-        @error "Set size must be nonnegative"
+        error("Set size must be nonnegative")
     end
 
-    if cache_check(G, :IntersectionRepresentation)
-        return cache_recall(G, :IntersectionRepresentation)
-    end
+    _err_message = "This graph does not have an intersection representation with only $k elements"
 
     if cache_check(G, :IntersectionNumber)
         i = cache_recall(G, :IntersectionNumber)
         if i > k
-            error("This graph has intersection number $i so no representation is possible with only $k elements")
+            error(_err_message)
+        end
+        if cache_check(G, :IntersectionRepresentation)
+            return cache_recall(G, :IntersectionRepresentation)
         end
     end
+
+    # if cache_check(G, :IntersectionRepresentation)
+    #     return cache_recall(G, :IntersectionRepresentation)
+    # end
+
+    # if cache_check(G, :IntersectionNumber)
+    #     i = cache_recall(G, :IntersectionNumber)
+    #     if i > k
+    #         error(_err_message)
+    #     end
+    # end
 
     VV = vlist(G)
     d = Dict{T,Set{Int}}()
@@ -86,6 +98,7 @@ function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
             d[v] = Set{Int}()
         end
         cache_save(G, :IntersectionRepresentation, d)
+        cache_save(G, :IntersectionNumber, 0)
         return d
     end
 
@@ -96,6 +109,10 @@ function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
         lookup = Dict{Tuple{T,T},Int}()
         EE = elist(G)
         m = length(EE)
+
+        if k < m
+            error(_err_message)
+        end
 
         for j = 1:m
             e = EE[j]
@@ -110,14 +127,26 @@ function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
             vals = (lookup[(v, w)] for w ∈ Nv)
             d[v] = Set{Int}(vals)
         end
-
+        cache_save(G, :IntersectionNumber, m)
         cache_save(G, :IntersectionRepresentation, d)
-
-
         return d
-
     end
 
+
+    # clique number check (generalize)
+    ω = length(max_clique(G))
+    bound = NE(G) / binomial(ω, 2)
+    if k < bound
+        @info "Failed clique-size bound"
+        error(_err_message)
+    end
+
+    # chromatic number of complement 
+    bound = chromatic_number(G')
+    if k < bound
+        @info "Failed chromatic number of complement bound"
+        error(_err_message)
+    end
 
 
     MOD = Model(get_solver())
@@ -161,10 +190,8 @@ function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
     status = Int(termination_status(MOD))
 
     if status != 1
-        error("No intersection representation found")
+        error(_err_message)
     end
-
-    # @info "Termination status = $status"
 
     X = value.(x)
     Y = value.(y)
@@ -198,22 +225,18 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool=true)::Int
         return cache_recall(G, :IntersectionNumber)
     end
 
-    if verbose
-        @info "Test if the graph is triangle free"
-    end
+    verbose && @info "Test if the graph is triangle free"
 
     if _is_triangle_free(G)
-        @info "No triangles"
+        verbose && @info "No triangles"
         cache_save(G, :IntersectionNumber, NE(G))
         return NE(G)
     end
 
     verbose && @info "This graph has triangles"
 
+    verbose && @info "Finding an upper bound"
 
-    if verbose
-        @info "Finding an upper bound"
-    end
 
     k = min(NE(G), NV(G))
 
