@@ -60,6 +60,8 @@ export IntersectionRepresentation
 Create an intersection representation of `G` using subsets of 
 `{1,2,...,k}` or throw an error if not such representation 
 exists.
+
+If `k` is omitted, we find a representation with the smallest possible value of `k`.
 """
 function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
     if k < 0
@@ -77,17 +79,6 @@ function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
             return cache_recall(G, :IntersectionRepresentation)
         end
     end
-
-    # if cache_check(G, :IntersectionRepresentation)
-    #     return cache_recall(G, :IntersectionRepresentation)
-    # end
-
-    # if cache_check(G, :IntersectionNumber)
-    #     i = cache_recall(G, :IntersectionNumber)
-    #     if i > k
-    #         error(_err_message)
-    #     end
-    # end
 
     VV = vlist(G)
     d = Dict{T,Set{Int}}()
@@ -211,6 +202,11 @@ function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
     return d
 end
 
+function IntersectionRepresentation(G::SimpleGraph)
+    k = IntersectionNumber(G)
+    return IntersectionRepresentation(G, k)
+end
+
 
 """
     IntersectionNumber(G)
@@ -219,24 +215,17 @@ Compute the intersection number of `G`.
 
 *Warning*: This can be slow. Use `IntersectionNumber(G,false)` to supress output.
 """
-function IntersectionNumber(G::SimpleGraph, verbose::Bool=true)::Int
+function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
 
     if cache_check(G, :IntersectionNumber)
         return cache_recall(G, :IntersectionNumber)
     end
 
-    verbose && @info "Test if the graph is triangle free"
 
     if _is_triangle_free(G)
-        verbose && @info "No triangles"
         cache_save(G, :IntersectionNumber, NE(G))
         return NE(G)
     end
-
-    verbose && @info "This graph has triangles"
-
-    verbose && @info "Finding an upper bound"
-
 
     k = min(NE(G), NV(G))
 
@@ -246,7 +235,7 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool=true)::Int
             @info "Testing if i(G) ≤ $k"
         end
         try
-            d = IntersectionRepresentation(G, k)
+            d = IntersectionRepresentation(G, k) |> _relabel_left
             cache_save(G, :IntersectionRepresentation, d)
 
             sets = values(d)
@@ -261,22 +250,42 @@ function IntersectionNumber(G::SimpleGraph, verbose::Bool=true)::Int
         end
     end
 
-    verbose && @info "Confirmed i(G) ≤ $k"
+    # verbose && @info "Confirmed i(G) ≤ $k"
 
-    go = true
-    while go
-        verbose && @info "Test if i(G) < $k"
-        try
-            d = IntersectionRepresentation(G, k - 1)
-            cache_save(G, :IntersectionRepresentation, d)
-            k -= 1
-        catch
-            go = false
-        end
-    end
+    # go = true
+    # while go
+    #     verbose && @info "Test if i(G) < $k"
+    #     try
+    #         d = IntersectionRepresentation(G, k - 1) |> _relabel_left
+    #         cache_save(G, :IntersectionRepresentation, d)
+    #         k -= 1
+    #     catch
+    #         go = false
+    #     end
+    # end
 
     cache_save(G, :IntersectionNumber, k)
     return k
 end
 
 export IntersectionNumber
+
+
+function _relabel_left(d::Dict{T,Set{Int}}) where {T}
+    sets = values(d)
+    A = sort(collect(union(sets...)))
+    k = length(A)
+
+    trans = Dict{Int,Int}()
+    for i = 1:k
+        trans[A[i]] = i
+    end
+
+    new_d = Dict{T,Set{Int}}()
+    for v in keys(d)
+        S = Set(trans[x] for x in d[v])
+        new_d[v] = S
+    end
+    return new_d
+end
+export _relabel_left   # debug #
