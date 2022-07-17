@@ -22,7 +22,7 @@ JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 
 [compat]
 julia = "1"
-SimpleGraphs = "0.6, 0.7"
+SimpleGraphs = "0.6, 0.7, 0.8"
 ClosedIntervals = "0.3.0"
 Memoize = "0.4"
 Permutations = "0.4"
