@@ -5,7 +5,7 @@ export PermutationRepresentationDrawing
 representation of the graph `G` (if one exists). An optional second
 argument (of type `Int`) determines the point size of the labels.
 """
-function PermutationRepresentationDrawing(G::SimpleGraphs.SimpleGraph, font_size = 8)
+function PermutationRepresentationDrawing(G::SimpleGraphs.UG, font_size = 8)
     f, g = PermutationRepresentation(G)
     PermutationRepresentationDrawing(f, g, font_size)
 end
