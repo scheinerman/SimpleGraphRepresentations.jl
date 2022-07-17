@@ -53,7 +53,7 @@ subtypes of `Real`. For example, declare `d` like this:
 """
 function PermutationGraph(d::Dict{VV,Tuple{S,T}}) where {VV,S<:Real,T<:Real}
     vtcs = collect(keys(d))
-    G = SimpleGraph{VV}()
+    G = UG{VV}()
     for v in vtcs
         add!(G, v)
     end
@@ -107,7 +107,7 @@ the vertices of `G` to integers. This pair of dictionaries form a
 permutation representation of `G`. (If `G` is not a permutation graph,
 an error is thrown.
 """
-function PermutationRepresentation(G::SimpleGraph)
+function PermutationRepresentation(G::UG)
     if cache_check(G, :PermutationRepresentation)
         return cache_recall(G, :PermutationRepresentation)
     end

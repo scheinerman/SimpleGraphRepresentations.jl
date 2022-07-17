@@ -120,7 +120,7 @@ function build_jump_graph{T}(list::Array{T,1}, early_quit::Bool = true)
     todo = []
     done = Set()
     push!(todo, list)
-    G = SimpleGraph{Array{T,1}}()
+    G = UG{Array{T,1}}()
     add!(G, list)
 
     while length(todo) > 0

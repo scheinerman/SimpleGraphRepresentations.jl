@@ -22,7 +22,7 @@ dictionary `f`. The keys are the vertices and the values are the sets
 (all of type `Set` or all of type `IntSet`).
 """
 function IntersectionGraph(f::Dict{S,T}) where {S,T<:AnySet}
-    G = SimpleGraph{S}()
+    G = UG{S}()
     for v in keys(f)
         add!(G, v)
     end
@@ -48,14 +48,14 @@ function IntersectionGraph(f::Dict{S,T}) where {S,T<:AnySet}
 end
 
 
-function _is_triangle_free(G::SimpleGraph)::Bool
+function _is_triangle_free(G::UG)::Bool
     A = adjacency(G)
     return tr(A^3) == 0
 end
 
 export IntersectionRepresentation
 """
-    IntersectionRepresentation(G:SimpleGraph, k::Int)
+    IntersectionRepresentation(G:UG, k::Int)
 
 Create an intersection representation of `G` using subsets of 
 `{1,2,...,k}` or throw an error if not such representation 
@@ -63,7 +63,7 @@ exists.
 
 If `k` is omitted, we find a representation with the smallest possible value of `k`.
 """
-function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
+function IntersectionRepresentation(G::UG{T}, k::Int) where {T}
     if k < 0
         error("Set size must be nonnegative")
     end
@@ -202,7 +202,7 @@ function IntersectionRepresentation(G::SimpleGraph{T}, k::Int) where {T}
     return d
 end
 
-function IntersectionRepresentation(G::SimpleGraph)
+function IntersectionRepresentation(G::UG)
     k = IntersectionNumber(G)
     return IntersectionRepresentation(G, k)
 end
@@ -215,7 +215,7 @@ Compute the intersection number of `G`.
 
 *Warning*: This can be slow. Use `IntersectionNumber(G,false)` to supress output.
 """
-function IntersectionNumber(G::SimpleGraph, verbose::Bool = true)::Int
+function IntersectionNumber(G::UG, verbose::Bool = true)::Int
 
     if cache_check(G, :IntersectionNumber)
         return cache_recall(G, :IntersectionNumber)

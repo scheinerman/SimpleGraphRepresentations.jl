@@ -8,7 +8,7 @@ export CircleRepresentation
 `CircleRepresentation(G)` returns a circle graph representation of the
 graph `G` or throws an error if there is none.
 """
-function CircleRepresentation(G::SimpleGraph)
+function CircleRepresentation(G::UG)
     if cache_check(G, :CircleRepresentation)
         return cache_recall(G, :CircleRepresentation)
     end
@@ -401,7 +401,7 @@ function _compareG(order, i, j, vertNum, sol, arr, verts, firstVertex, G)
     end
 end
 
-@memoize function _final(P::SimplePoset, G::SimpleGraph, numVert, vertNum)
+@memoize function _final(P::SimplePoset, G::UG, numVert, vertNum)
     T = element_type(P)
     M = maximals(P)
     for x in M

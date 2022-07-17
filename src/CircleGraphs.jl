@@ -45,7 +45,7 @@ function CircleGraph(list::Array{T,1}) where {T}
     elts = collect(keys(positions))
     n = length(elts)
 
-    G = SimpleGraph{T}()
+    G = UG{T}()
     for v in elts
         add!(G, v)
     end
@@ -108,7 +108,7 @@ using SimpleGF2
 `isCircleGraph(G)` returns `true` if `G` is a circle graph
 and `false` otherwise.
 """
-function isCircleGraph(G::SimpleGraphs.SimpleGraph)
+function isCircleGraph(G::SimpleGraphs.UG)
     V = eltype(G)
     vertNum = Dict{V,Int}()
     counter = 1

@@ -19,7 +19,7 @@ function ThresholdGraph(w::Array{T,1}) where {T<:Real}
 end
 
 function ThresholdGraph(dw::Dict{S,T}) where {S,T<:Real}
-    G = SimpleGraph{S}()
+    G = UG{S}()
     vtcs = collect(keys(dw))
     n = length(vtcs)
 
@@ -62,7 +62,7 @@ creation sequence and `vtx_list` specifies the order in which the
 vertices are added when creating `G`. If `G` is not a threshold
 graph, then an error is raised.
 """
-function CreationSequence(G1::SimpleGraph)
+function CreationSequence(G1::UG)
     A = Int[]
     T = eltype(G1)
     V = T[]
@@ -97,7 +97,7 @@ end
 `G`. This returns a dictionary mapping vertices of `G` to `Rational`
 weights. An error is raised if `G` is not a threshold graph.
 """
-function ThresholdRepresentation(G::SimpleGraph)
+function ThresholdRepresentation(G::UG)
     if cache_check(G, :ThresholdRepresentation)
         return cache_recall(G, :ThresholdRepresentation)
     end

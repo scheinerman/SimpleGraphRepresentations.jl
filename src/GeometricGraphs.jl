@@ -36,7 +36,7 @@ iff distance between their points is at most `1` (or `d` if given as a
 second argument).
 """
 function GeometricGraph(f::Dict{S,Vector{T}}, d::Real = 1) where {S,T<:Real}
-    G = SimpleGraph{S}()
+    G = UG{S}()
     vtcs = collect(keys(f))
     for v in vtcs
         add!(G, v)

@@ -38,7 +38,7 @@ mapping vertices to pairs `(J,t)` where `J` is a `ClosedInterval` and
 """
 function ToleranceGraph(f::Dict{X,Tuple{ClosedInterval{S},T}}) where {S<:Real,T<:Real,X}
     vtcs = collect(keys(f))
-    G = SimpleGraph{X}()
+    G = UG{X}()
     for v in vtcs
         add!(G, v)
     end

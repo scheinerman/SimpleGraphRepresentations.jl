@@ -7,7 +7,7 @@ in `vtcs`.
 `RandomCograph(n)` creates a random cograph with vertex set `1:n`.
 """
 function RandomCograph(vtcs::Vector{T}) where {T}
-    G = SimpleGraph{T}()
+    G = UG{T}()
 
     # basis cases
     if length(vtcs) == 0
@@ -67,7 +67,7 @@ RandomCograph(A::Set) = RandomCograph(collect(A))
 `is_cograph(G)` returns `true` is `G` is a cograph, i.e., a
 complement reducible graph.
 """
-function is_cograph(G::SimpleGraph{T}) where {T}
+function is_cograph(G::UG{T}) where {T}
     if NV(G) <= 3    # all graphs with 3 or fewer vertices are cographs
         return true
     end
@@ -92,11 +92,11 @@ end
 
 
 """
-`CographRepresentation(G::SimpleGraph)` returns a `String` that
+`CographRepresentation(G::UG)` returns a `String` that
 presents a construction of `G` using disjoint union `+` and join `*`.
 Throws an error if `G` is not a cograph.
 """
-function CographRepresentation(G::SimpleGraph)
+function CographRepresentation(G::UG)
     if cache_check(G, :CographRepresentation)
         return cache_recall(G, :CographRepresentation)
     end
