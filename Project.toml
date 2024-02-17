@@ -32,7 +32,7 @@ SimpleGraphAlgorithms = "0.4"
 SimplePartitions = "0.3"
 SimplePosets = "0.1"
 SimpleDrawing = "0.2"
-ChooseOptimizer = "0.1"
+ChooseOptimizer = "0.1, 0.2"
 JuMP = "1"
 
 [extras]
