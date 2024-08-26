@@ -1,6 +1,6 @@
 name = "SimpleGraphRepresentations"
 uuid = "4f049fe5-7dc2-5fe0-b347-242bcf8eeb44"
-version = "0.0.2"
+version = "0.0.3"
 
 [deps]
 ClosedIntervals = "059b0e18-018a-5deb-a5b2-c624ee85784b"
@@ -28,7 +28,7 @@ Memoize = "0.4"
 Permutations = "0.4"
 Plots = "1"
 SimpleGF2 = "0.1"
-SimpleGraphAlgorithms = "0.4, 0.5"
+SimpleGraphAlgorithms = "0.5, 0.6"
 SimplePartitions = "0.3"
 SimplePosets = "0.1, 0.2"
 SimpleDrawing = "0.2"
